@@ -15,7 +15,7 @@ https://www.jetbrains.com/idea/download/#section=windows
 ```
 
 - Open "Project Structure" and install Project SDK: corletto-1.8
-- Project language level: 8
+- Project language level: 11
 
 ### VPN
 
