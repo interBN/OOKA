@@ -1,6 +1,7 @@
 package A1;
 
-import A1.interfaces.DataProvider;
+import A1.interfaces.Caching;
+import A1.interfaces.Port;
 import A1.interfaces.HotelSearch;
 import A1.types.Hotel;
 
@@ -10,8 +11,8 @@ public class HotelRetrieval implements HotelSearch {
 
     private static final HotelRetrieval singleton = new HotelRetrieval();
 
-    private final Cache cache;
-    private final DBAccessAdapter db;
+    private final Caching cache;
+    private final Port db;
 
     private final Logger logger;
 
@@ -43,8 +44,7 @@ public class HotelRetrieval implements HotelSearch {
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;
         log += String.format(", \u001B[34mDAUER: %d ms, ", timeElapsed);
-        log += String.format("\u001B[35mANTWORT: %s", Arrays.toString(hotels));
-        log += "\u001B[0m";
+        log += String.format("\u001B[35mANTWORT: %s\u001B[0m", Arrays.toString(hotels));
         logger.log(log);
 
         return hotels;
@@ -54,6 +54,5 @@ public class HotelRetrieval implements HotelSearch {
     @Deprecated
     public void openSession() {
     }
-
 
 }

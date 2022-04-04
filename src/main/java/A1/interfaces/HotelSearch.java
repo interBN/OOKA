@@ -6,5 +6,6 @@ public interface HotelSearch {
 
     Hotel[] getHotelByName(String name) throws Exception;
 
+    @Deprecated
     void openSession();
 }

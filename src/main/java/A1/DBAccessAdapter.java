@@ -1,12 +1,12 @@
 package A1;
 
-import A1.interfaces.DataProvider;
+import A1.interfaces.Port;
 import A1.types.Hotel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBAccessAdapter implements DataProvider {
+public class DBAccessAdapter implements Port {
 
     private static final DBAccessAdapter singleton = new DBAccessAdapter();
 
@@ -19,7 +19,6 @@ public class DBAccessAdapter implements DataProvider {
     public static DBAccessAdapter getInstance() {
         return singleton;
     }
-
 
     @Override
     public Hotel[] getObjects(int type, String value) throws Exception {
