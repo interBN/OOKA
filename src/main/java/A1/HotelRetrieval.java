@@ -1,7 +1,48 @@
 package A1;
 
-public class HotelRetrieval {
-    public static void main(String[] args) {
-        System.out.println("dafuq");
+import A1.interfaces.HotelSearch;
+import A1.types.Hotel;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class HotelRetrieval implements HotelSearch {
+
+    private final Cache cache;
+    private final DBAccess db;
+
+    public HotelRetrieval() {
+        this.cache = new Cache();
+        this.db = new DBAccess();
+    }
+
+    public Hotel[] getHotelByName(String name) {
+        List<Object> result = cache.getObjects(DBAccess.HOTEL, name); // check if name is in cache
+        if (result != null) {
+            System.out.print("Found hotel in cache: ");
+        } else { // if no: fetch hotels by name
+            openSession();
+            result = db.getObjects(DBAccess.HOTEL, name);
+            cache.cacheResult(name, result);
+            db.closeConnection();
+            System.out.print("Fetch hotel: ");
+        }
+        Hotel[] hotels = ListToHotels(result);
+        System.out.println(Arrays.toString(hotels));
+        return hotels;
+    }
+
+    public void openSession() {
+        db.openConnection();
+    }
+
+    private Hotel[] ListToHotels(List<Object> list) {
+        List<Hotel> result = new ArrayList<>();
+        for (int i = 0, resultSize = list.size() / 3; i < resultSize; i++) {
+            int index = i * 3;
+            result.add(new Hotel(list.subList(index, index + 3)));
+        }
+        return result.toArray(new Hotel[0]);
     }
 }

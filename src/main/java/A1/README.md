@@ -6,6 +6,7 @@ externen Verhalten zu realisieren?_
 
 Antwort:
 
+- Adapter???
 - Singleton
 - MVC
 - Command???

@@ -1,12 +1,15 @@
 package A1;
 
 
+import A1.interfaces.Data;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class DBAccess {
+@SuppressWarnings("ALL")
+public class DBAccess implements Data {
 
     public final static int HOTEL = 0;
 
@@ -20,41 +23,41 @@ public class DBAccess {
 
     }
 
-    public static void main(String[] args) {
-        DBAccess acc = new DBAccess();
-        System.out.println("Mini-Tutorial der Klasse DBAccess");
-        System.out.println("c/o Sascha Alda, 2019 - 2022");
-        System.out.println("---------------------------------");
-        System.out.println("Zunächst MUSS ein externer Client (außerhalb der Komponente!) mit der Methode openConnection() die Session explizit öffnen!");
-        acc.openConnection();
-
-        System.out.println("\nSuche nach allen Hotels:");
-        System.out.println("Methodenaufruf: getObjects( DBAccess.HOTEL, \"*\")");
-        List<String> result = acc.getObjects(DBAccess.HOTEL, "*");
-
-        System.out.println("Hotels found: " + result.size() / 3);
-        for (int i = 0; i < result.size() / 3; i++) {
-            System.out.println("--------------------------------------------------");
-            int startIndex = i * 3;
-            Hotel h = new Hotel(result.get(startIndex), result.get(startIndex + 1), result.get(startIndex + 2));
-            System.out.println(h);
-        }
-
-        System.out.println("\nSuche nach Hotels mit dem TeilString 'Jahres':");
-        System.out.println("Methodenaufruf: getObjects( DBAccess.HOTEL, \"Jahres\")");
-        result = acc.getObjects(DBAccess.HOTEL, "Jahres");
-        for (int i = 0, resultSize = result.size() / 3; i < resultSize; i++) {
-            System.out.println("--------------------------------------------------");
-            int startIndex = i * 3;
-            Hotel h = new Hotel(result.get(startIndex), result.get(startIndex + 1), result.get(startIndex + 2));
-            System.out.println(h);
-        }
-
-        System.out.println("\nDann MUSS ein externer Client mit der Methode closeConnection() die Session explizit schließen!");
-        acc.closeConnection();
-        // TODO Auto-generated method stub
-
-    }
+//    public static void main(String[] args) {
+//        DBAccess acc = new DBAccess();
+//        System.out.println("Mini-Tutorial der Klasse DBAccess");
+//        System.out.println("c/o Sascha Alda, 2019 - 2022");
+//        System.out.println("---------------------------------");
+//        System.out.println("Zunächst MUSS ein externer Client (außerhalb der Komponente!) mit der Methode openConnection() die Session explizit öffnen!");
+//        acc.openConnection();
+//
+//        System.out.println("\nSuche nach allen Hotels:");
+//        System.out.println("Methodenaufruf: getObjects( DBAccess.HOTEL, \"*\")");
+//        List<String> result = acc.getObjects(DBAccess.HOTEL, "*");
+//
+//        System.out.println("Hotels found: " + result.size() / 3);
+//        for (int i = 0; i < result.size() / 3; i++) {
+//            System.out.println("--------------------------------------------------");
+//            int startIndex = i * 3;
+//            Hotel h = new Hotel(result.get(startIndex), result.get(startIndex + 1), result.get(startIndex + 2));
+//            System.out.println(h);
+//        }
+//
+//        System.out.println("\nSuche nach Hotels mit dem TeilString 'Jahres':");
+//        System.out.println("Methodenaufruf: getObjects( DBAccess.HOTEL, \"Jahres\")");
+//        result = acc.getObjects(DBAccess.HOTEL, "Jahres");
+//        for (int i = 0, resultSize = result.size() / 3; i < resultSize; i++) {
+//            System.out.println("--------------------------------------------------");
+//            int startIndex = i * 3;
+//            Hotel h = new Hotel(result.get(startIndex), result.get(startIndex + 1), result.get(startIndex + 2));
+//            System.out.println(h);
+//        }
+//
+//        System.out.println("\nDann MUSS ein externer Client mit der Methode closeConnection() die Session explizit schließen!");
+//        acc.closeConnection();
+//        // TODO Auto-generated method stub
+//
+//    }
 
     public void openConnection() {
         try {
@@ -76,10 +79,10 @@ public class DBAccess {
         }
     }
 
-    public List<String> getObjects(int type, String value) {
+    public List<Object> getObjects(int type, String value) {
         Statement st;
         ResultSet rs;
-        List<String> result = new ArrayList();
+        List<Object> result = new ArrayList();
         if (value.equals("*")) {
             value = "";
         }
