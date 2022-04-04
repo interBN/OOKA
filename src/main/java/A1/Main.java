@@ -6,16 +6,24 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        HotelRetrieval hr = new HotelRetrieval();
-        String search = "Jahres";
+        HotelRetrieval hr = HotelRetrieval.getInstance();
+        String search = "ma";
         try {
             Hotel[] h1 = hr.getHotelByName(search);
-            System.out.println(Arrays.toString(h1));
             Hotel[] h2 = hr.getHotelByName(search);
-            System.out.println(Arrays.toString(h2));
-            System.out.println(h1[0].equals(h2[0]));
+            System.out.println("Equal: " + Arrays.toString(h1).equals(Arrays.toString(h2)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        HotelRetrieval hr2 = HotelRetrieval.getInstance();
+        try {
+            Hotel[] h1 = hr2.getHotelByName(search);
+            Hotel[] h2 = hr2.getHotelByName(search);
+            System.out.println("Equal: " + Arrays.toString(h1).equals(Arrays.toString(h2)));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
+

@@ -3,37 +3,48 @@ package A1;
 import A1.interfaces.HotelSearch;
 import A1.types.Hotel;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class HotelRetrieval implements HotelSearch {
 
+    private static final HotelRetrieval singleton = new HotelRetrieval();
+
     private final Cache cache;
     private final DBAccess db;
 
-    public HotelRetrieval() {
+    private HotelRetrieval() {
         this.cache = Cache.getInstance();
         this.db = DBAccess.getInstance();
     }
 
+    public static HotelRetrieval getInstance() {
+        return singleton;
+    }
 
+    @Override
     public Hotel[] getHotelByName(String name) throws Exception {
         List<Object> result = cache.getObjects(DBAccess.HOTEL, name); // check if name is in cache
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
+        LocalDateTime now = LocalDateTime.now();
         if (result != null) {
-            System.out.print("Found hotel in cache: ");
+            System.out.println(dtf.format(now) + ": CACHE: Zugriff auf Buchungssystem über Methode getHotelByName(). Suchwort: " + name);
         } else { // if no: fetch hotels by name
             openSession();
             result = db.getObjects(DBAccess.HOTEL, name);
             cache.cacheResult(name, result);
             db.closeConnection();
-            System.out.print("Fetch hotel: ");
+            System.out.println(dtf.format(now) + ": FETCH: Zugriff auf Buchungssystem über Methode getHotelByName(). Suchwort: " + name);
         }
         Hotel[] hotels = ListToHotels(result);
         System.out.println(Arrays.toString(hotels));
         return hotels;
     }
 
+    @Override
     public void openSession() {
         db.openConnection();
     }
