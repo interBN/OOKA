@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
         HotelRetrieval hr = HotelRetrieval.getInstance();
-        String search = "ma";
+        String search = "ma as5d";
         try {
             Hotel[] h1 = hr.getHotelByName(search);
             Hotel[] h2 = hr.getHotelByName(search);
@@ -15,7 +15,7 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        System.out.println("-----------------------------------------------");
         HotelRetrieval hr2 = HotelRetrieval.getInstance();
         try {
             Hotel[] h1 = hr2.getHotelByName(search);

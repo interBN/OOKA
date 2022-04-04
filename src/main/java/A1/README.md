@@ -7,8 +7,9 @@ externen Verhalten zu realisieren?_
 Antwort:
 
 - Adapter???
+- Facade???
 - Singleton
-- MVC
+- MVC???
 - Command???
 
 # FA1
@@ -44,6 +45,8 @@ Name. Suchwort: Berg
 ```
 
 _Auch das Logging ist eine Querschnittsfunktionalität, die nicht in der Klasse HotelRetrieval enthalten sein soll._
+
+Antwort: done
 
 # FA5
 
