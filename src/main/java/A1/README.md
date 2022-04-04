@@ -6,6 +6,7 @@ externen Verhalten zu realisieren?_
 
 Antwort:
 
+- Encapsulated Classifier
 - Adapter???
 - Facade???
 - Singleton

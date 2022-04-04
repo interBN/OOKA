@@ -1,8 +1,8 @@
 package A1.interfaces;
 
-import java.util.List;
+import A1.types.Hotel;
 
-public interface Caching extends Data {
+public interface Caching extends DataProvider {
 
-    void cacheResult(String key, List<Object> value);
+    void cacheResult(String key, Hotel[] value);
 }

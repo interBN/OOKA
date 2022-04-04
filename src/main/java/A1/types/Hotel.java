@@ -9,8 +9,8 @@ public class Hotel {
     private final String name;
     private final String city;
 
-    public Hotel(List<Object> list) {
-        this(Integer.parseInt((String) list.get(0)), list.get(1).toString(), list.get(2).toString());
+    public Hotel(List<String> list) {
+        this(Integer.parseInt(list.get(0)), list.get(1), list.get(2));
     }
 
     public Hotel(int id, String name, String city) {
