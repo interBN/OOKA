@@ -9,10 +9,16 @@ import java.util.TreeMap;
 @SuppressWarnings("unused")
 public class Cache implements Caching {
 
+    private static final Cache singleton = new Cache();
+
     private final Map<String, List<Object>> cache;
 
-    public Cache() {
+    private Cache() {
         this.cache = new TreeMap<>();
+    }
+
+    public static Cache getInstance() {
+        return singleton;
     }
 
     public void cacheResult(String key, List<Object> value) {

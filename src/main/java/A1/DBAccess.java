@@ -10,17 +10,19 @@ import java.util.Properties;
 
 @SuppressWarnings("ALL")
 public class DBAccess implements Data {
-
     public final static int HOTEL = 0;
-
     public final static int AUTO = 1;
-
+    private static DBAccess singleton = new DBAccess();
     private final String url = "jdbc:postgresql://dumbo.inf.h-brs.de/demouser";
 
     private Connection conn;
 
-    public DBAccess() {
+    private DBAccess() {
 
+    }
+
+    public static DBAccess getInstance() {
+        return singleton;
     }
 
 //    public static void main(String[] args) {
@@ -111,6 +113,4 @@ public class DBAccess implements Data {
         }
 
     }
-
-
 }

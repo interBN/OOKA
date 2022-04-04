@@ -13,11 +13,12 @@ public class HotelRetrieval implements HotelSearch {
     private final DBAccess db;
 
     public HotelRetrieval() {
-        this.cache = new Cache();
-        this.db = new DBAccess();
+        this.cache = Cache.getInstance();
+        this.db = DBAccess.getInstance();
     }
 
-    public Hotel[] getHotelByName(String name) {
+
+    public Hotel[] getHotelByName(String name) throws Exception {
         List<Object> result = cache.getObjects(DBAccess.HOTEL, name); // check if name is in cache
         if (result != null) {
             System.out.print("Found hotel in cache: ");
@@ -37,7 +38,10 @@ public class HotelRetrieval implements HotelSearch {
         db.openConnection();
     }
 
-    private Hotel[] ListToHotels(List<Object> list) {
+    private Hotel[] ListToHotels(List<Object> list) throws Exception {
+        if (list.size() % 3 != 0) {
+            throw new Exception("Something is wrong with the API response. Some data are missing: " + list);
+        }
         List<Hotel> result = new ArrayList<>();
         for (int i = 0, resultSize = list.size() / 3; i < resultSize; i++) {
             int index = i * 3;
