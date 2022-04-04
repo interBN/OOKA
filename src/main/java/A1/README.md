@@ -1,6 +1,6 @@
 # UML
 
-![](.\UML\uml.png)
+![](./UML/uml.png)
 
 # FA0
 
