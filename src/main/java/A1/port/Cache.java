@@ -28,7 +28,7 @@ public class Cache extends Proxy implements Caching {
     }
 
     @Override
-    protected Hotel[] getHotels(int type, String value) {
-        return cache.get(value);
+    protected Hotel[] getHotels(int type, String name) {
+        return cache.get(name);
     }
 }

@@ -3,6 +3,7 @@ package A1.port;
 import A1.types.Hotel;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public abstract class Proxy {
 
@@ -15,14 +16,15 @@ public abstract class Proxy {
     }
 
     @SuppressWarnings("SameParameterValue")
-    protected abstract Hotel[] getHotels(int type, String value) throws Exception;
+    protected abstract Hotel[] getHotels(int type, String name) throws Exception;
 
-    public Hotel[] getHotels(String value) throws Exception {
+    public Hotel[] getHotels(String name) throws Exception {
 
         long start = System.currentTimeMillis();
-        String log = String.format("Zugriff auf Buchungssystem über Methode getHotelByName(), \u001B[32mSuchwort: \"%s\", \u001B[33mMethode: %s", value, method);
+        String log = String.format("Zugriff auf Buchungssystem über Methode getHotelByName(), \u001B[32mSuchwort: \"%s\", \u001B[33mMethode: %s", name, method);
 
-        Hotel[] hotels = getHotels(DBAccess.HOTEL, value);
+        name = name.toLowerCase(Locale.ROOT);
+        Hotel[] hotels = getHotels(DBAccess.HOTEL, name);
 
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;

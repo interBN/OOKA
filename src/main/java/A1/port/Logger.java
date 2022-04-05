@@ -44,7 +44,6 @@ public class Logger {
     public String msToDate(long ms) {
         Date currentDate = new Date(ms);
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy HH:mm");
-        String format = sdf.format(currentDate);
-        return format;
+        return sdf.format(currentDate);
     }
 }

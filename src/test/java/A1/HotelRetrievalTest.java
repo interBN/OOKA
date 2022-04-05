@@ -30,7 +30,6 @@ public class HotelRetrievalTest {
         }
     }
 
-
     @Test
     public void getHotelByName2() {
         HotelRetrieval hr = HotelRetrieval.getInstance();
@@ -49,6 +48,7 @@ public class HotelRetrievalTest {
         String search = "ma";
         try {
             Hotel[] h1 = hr.getHotelByName(search);
+            System.out.println("------------------------------------------");
             Hotel[] h2 = hr.getHotelByName(search);
             Assert.assertArrayEquals(h1, h2);
         } catch (Exception e) {
