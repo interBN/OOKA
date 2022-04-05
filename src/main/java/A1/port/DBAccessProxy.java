@@ -1,34 +1,36 @@
-package A1;
+package A1.port;
 
-import A1.interfaces.Port;
 import A1.types.Hotel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBAccessAdapter implements Port {
+public class DBAccessProxy extends Proxy {
 
-    private static final DBAccessAdapter singleton = new DBAccessAdapter();
+    private static final DBAccessProxy singleton = new DBAccessProxy();
 
     private final DBAccess db;
 
-    private DBAccessAdapter() {
+    private DBAccessProxy() {
+        super("FETCH");
         db = new DBAccess();
     }
 
-    public static DBAccessAdapter getInstance() {
+    public static DBAccessProxy getInstance() {
         return singleton;
     }
 
     @Override
-    public Hotel[] getObjects(int type, String value) throws Exception {
+    protected Hotel[] getHotels(int type, String value) throws Exception {
         db.openConnection();
         List<String> response = db.getObjects(type, value);
         db.closeConnection();
-        return listToHotels(response);
+        Hotel[] hotels = listToHotels(response);
+        Cache.getInstance().cacheResult(value, hotels);
+        return hotels;
     }
 
-    public Hotel[] listToHotels(List<String> list) throws Exception {
+    private Hotel[] listToHotels(List<String> list) throws Exception {
         if (list == null) {
             return null;
         }

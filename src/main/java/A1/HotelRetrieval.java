@@ -1,25 +1,24 @@
 package A1;
 
-import A1.interfaces.Caching;
 import A1.interfaces.HotelSearch;
-import A1.interfaces.Port;
+import A1.port.Cache;
+import A1.port.DBAccessProxy;
+import A1.port.Proxy;
 import A1.types.Hotel;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HotelRetrieval implements HotelSearch {
 
     private static final HotelRetrieval singleton = new HotelRetrieval();
 
-    private final Caching cache;
-    private final Port db;
-
-    private final Logger logger;
+    private final List<Proxy> proxies;
 
     private HotelRetrieval() {
-        this.cache = Cache.getInstance();
-        this.db = DBAccessAdapter.getInstance();
-        this.logger = Logger.getInstance();
+        proxies = new ArrayList<>();
+        proxies.add(Cache.getInstance());
+        proxies.add(DBAccessProxy.getInstance());
     }
 
     public static HotelRetrieval getInstance() {
@@ -28,31 +27,17 @@ public class HotelRetrieval implements HotelSearch {
 
     @Override
     public Hotel[] getHotelByName(String name) throws Exception {
+        return getHotelByName(name, 0);
+    }
 
-        long start = System.currentTimeMillis();
-        String log = String.format("Zugriff auf Buchungssystem über Methode getHotelByName(), \u001B[32mSuchwort: \"%s\", \u001B[33mMethode: ", name);
-
-        Hotel[] hotels = cache.getObjects(DBAccess.HOTEL, name);
-        if (hotels != null) {
-            log += "CACHE";
-        } else {
-            hotels = db.getObjects(DBAccess.HOTEL, name);
-            cache.cacheResult(name, hotels);
-            log += "FETCH";
+    private Hotel[] getHotelByName(String name, int level) throws Exception {
+        Hotel[] hotels = proxies.get(level).getHotels(name);
+        if (hotels == null && level == proxies.size()) {
+            return null;
         }
-
-        long finish = System.currentTimeMillis();
-        long timeElapsed = finish - start;
-        log += String.format(", \u001B[34mDAUER: %d ms, ", timeElapsed);
-        log += String.format("\u001B[35mANTWORT: %s\u001B[0m", Arrays.toString(hotels));
-        logger.log(log);
-
+        if (hotels == null) {
+            return getHotelByName(name, ++level);
+        }
         return hotels;
     }
-
-    @Override
-    @Deprecated
-    public void openSession() {
-    }
-
 }
