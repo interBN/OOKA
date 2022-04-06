@@ -21,9 +21,9 @@ public class DBAccessProxy extends Proxy {
     }
 
     @Override
-    protected Hotel[] getHotels(int type, String name) throws Exception {
+    protected Hotel[] getHotelsProxy( String name) throws Exception {
         db.openConnection();
-        List<String> response = db.getObjects(type, name);
+        List<String> response = db.getObjects(DBAccess.HOTEL, name);
         db.closeConnection();
         Hotel[] hotels = listToHotels(response);
         Cache.getInstance().cacheResult(name, hotels);
