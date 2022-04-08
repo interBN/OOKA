@@ -1,4 +1,4 @@
-package A1;
+package A1.port;
 
 import A1.port.DBAccess;
 import org.junit.jupiter.api.Assertions;
