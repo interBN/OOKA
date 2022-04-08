@@ -16,7 +16,7 @@ https://www.jetbrains.com/idea/download/#section=windows
 
 - Open "Project Structure" and install Project SDK: corletto-1.8
 - Project language level: 8
-- Download Plugin: 
+- Download Plugin:
 
 ### VPN
 
@@ -34,10 +34,10 @@ https://portal.inf.h-brs.de/certmk/
 
 ## Useful links
 
-UML:
+Generate UML:
 
 ```
-https://www.draw.io/
+https://www.jetbrains.com/help/idea/class-diagram.html#analyze_class
 ```
 
 ## Project Structure
