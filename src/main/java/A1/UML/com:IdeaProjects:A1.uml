@@ -3,142 +3,71 @@
   <ID>JAVA</ID>
   <OriginalElement>/Users/s.chengsprinteins.com/IdeaProjects/OOKA</OriginalElement>
   <nodes>
-    <node x="-304.99124865952047" y="500.1478991097923">A1.port.Proxy</node>
-    <node x="-509.3216141340604" y="776.0002729970328">A1.port.Cache</node>
-    <node x="-859.721990114387" y="754.5002729970329">A1.types.Hotel</node>
-    <node x="-509.32161413406044" y="1008.0060785122723">A1.interfaces.Caching</node>
-    <node x="-145.37484616888685" y="776.0002729970328">A1.port.DBAccessProxy</node>
-    <node x="-304.99124865952047" y="246.29552522255193">A1.HotelRetrieval</node>
-    <node x="-531.4502190806456" y="291.29552522255193">A1.ConsoleTester</node>
-    <node x="29.83092966036793" y="477.6478991097924">A1.port.Logger</node>
-    <node x="-289.9912486595204" y="154.08942943155046">A1.interfaces.HotelSearch</node>
-    <node x="-145.37484616888685" y="1008.0060785122723">A1.port.DBAccess</node>
+    <node x="297.98996129656507" y="303.0377358490566">A1.port.Proxy</node>
+    <node x="43.98996129656507" y="563.3386766157266">A1.port.Cache</node>
+    <node x="-33.12324625060478" y="393.0377358490566">A1.interfaces.Caching</node>
+    <node x="385.59720206418297" y="566.4476401946556">A1.port.DBAccessProxy</node>
+    <node x="297.98996129656507" y="92.92213197836114">A1.HotelRetrieval</node>
+    <node x="297.98996129656507" y="-4.193471892334372">A1.interfaces.HotelSearch</node>
+    <node x="614.1031688437349" y="303.0377358490566">A1.port.Logger</node>
+    <node x="385.59720206418297" y="787.731274583796">A1.port.DBAccess</node>
   </nodes>
   <notes />
   <edges>
     <edge source="A1.port.DBAccessProxy" target="A1.port.Proxy" relationship="GENERALIZATION">
-      <point x="14.999846168886847" y="-84.00027299703277" />
-      <point x="-2.875" y="750.0" />
-      <point x="-185.491" y="750.0" />
-      <point x="2.4865952045161066E-4" y="72.5001008902077" />
+      <point x="-2.020641829858505E-4" y="-83.99964019465563" />
+      <point x="513.097" y="529.0" />
+      <point x="417.49" y="529.0" />
+      <point x="3.870343493872497E-5" y="72.5002641509434" />
     </edge>
     <edge source="A1.port.Cache" target="A1.port.Proxy" relationship="GENERALIZATION">
-      <point x="-15.00038586593962" y="-84.00027299703277" />
-      <point x="-397.322" y="750.0" />
-      <point x="-185.491" y="750.0" />
-      <point x="2.4865952045161066E-4" y="72.5001008902077" />
-    </edge>
-    <edge source="A1.ConsoleTester" target="A1.HotelRetrieval" relationship="DEPENDENCY">
-      <point x="83.5" y="-14.999525222551938" />
-      <point x="-139.5" y="-14.999525222551938" />
-    </edge>
-    <edge source="A1.port.Cache" target="A1.types.Hotel" relationship="DEPENDENCY">
-      <point x="-3.858659396200892E-4" y="-84.00027299703277" />
-      <point x="-382.322" y="442.5" />
-      <point x="-759.722" y="442.5" />
-      <point x="-9.885612939797284E-6" y="-105.50027299703288" />
-    </edge>
-    <edge source="A1.HotelRetrieval" target="A1.port.Proxy" relationship="DEPENDENCY">
-      <point x="0.0" y="84.0" />
-      <point x="20.0" y="-72.5" />
-    </edge>
-    <edge source="A1.port.Proxy" target="A1.port.Logger" relationship="DEPENDENCY">
-      <point x="119.5" y="15.000000000000114" />
-      <point x="-101.5" y="15.0" />
-    </edge>
-    <edge source="A1.port.Cache" target="A1.types.Hotel" relationship="TO_MANY">
-      <point x="-127.0" y="1.1368683772161603E-13" />
-      <point x="100.0" y="0.0" />
-    </edge>
-    <edge source="A1.port.DBAccessProxy" target="A1.port.DBAccess" relationship="CREATE">
-      <point x="15.0" y="84.0" />
-      <point x="8.0" y="-116.5" />
-    </edge>
-    <edge source="A1.HotelRetrieval" target="A1.port.Proxy" relationship="TO_MANY">
-      <point x="-20.0" y="84.0" />
-      <point x="0.0" y="-72.5" />
-    </edge>
-    <edge source="A1.interfaces.Caching" target="A1.types.Hotel" relationship="DEPENDENCY">
-      <point x="-127.00038586593956" y="-7.851227223909518E-5" />
-      <point x="-548.95" y="1035.506" />
-      <point x="-548.95" y="442.5" />
-      <point x="-759.722" y="442.5" />
-      <point x="-9.885612939797284E-6" y="-105.50027299703288" />
+      <point x="3.870343493872497E-5" y="-83.99967661572657" />
+      <point x="170.99" y="529.0" />
+      <point x="417.49" y="529.0" />
+      <point x="3.870343493872497E-5" y="72.5002641509434" />
     </edge>
     <edge source="A1.port.Proxy" target="A1.port.Logger" relationship="TO_ONE">
-      <point x="119.5" y="1.1368683772161603E-13" />
+      <point x="119.5" y="22.5" />
       <point x="-101.5" y="0.0" />
     </edge>
     <edge source="A1.HotelRetrieval" target="A1.interfaces.HotelSearch" relationship="REALIZATION">
-      <point x="5.6843418860808015E-14" y="-84.0" />
+      <point x="-11.5" y="-84.0" />
       <point x="0.0" y="27.5" />
     </edge>
-    <edge source="A1.HotelRetrieval" target="A1.port.DBAccessProxy" relationship="DEPENDENCY">
-      <point x="139.5" y="0.0" />
-      <point x="250.33092966036793" y="330.29552522255193" />
-      <point x="250.33092966036793" y="860.0002729970328" />
-      <point x="127.5" y="0.0" />
-    </edge>
-    <edge source="A1.HotelRetrieval" target="A1.port.Cache" relationship="DEPENDENCY">
-      <point x="117.00024865952047" y="84.00047477744806" />
-      <point x="-48.491" y="722.0" />
-      <point x="-367.322" y="722.0" />
-      <point x="14.99961413406038" y="-84.00027299703277" />
-    </edge>
-    <edge source="A1.port.DBAccessProxy" target="A1.types.Hotel" relationship="CREATE">
-      <point x="-127.5" y="0.0" />
-      <point x="-222.82161413406038" y="860.0002729970328" />
-      <point x="-222.82161413406038" y="1080.5060785122723" />
-      <point x="-759.721990114387" y="1080.5060785122723" />
-      <point x="0.0" y="105.5" />
+    <edge source="A1.HotelRetrieval" target="A1.port.Proxy" relationship="DEPENDENCY">
+      <point x="0.0" y="83.99999999999997" />
+      <point x="16.5" y="-72.5" />
     </edge>
     <edge source="A1.port.DBAccessProxy" target="A1.port.DBAccess" relationship="TO_ONE">
-      <point x="-15.0" y="84.0" />
-      <point x="-22.0" y="-116.5" />
+      <point x="22.0" y="84.0" />
+      <point x="15.0" y="-116.5" />
     </edge>
-    <edge source="A1.port.Proxy" target="A1.types.Hotel" relationship="DEPENDENCY">
-      <point x="-119.49975134047952" y="1.008902077046514E-4" />
-      <point x="-334.0" y="572.648" />
-      <point x="-334.0" y="442.5" />
-      <point x="-759.722" y="442.5" />
-      <point x="-9.885612939797284E-6" y="-105.50027299703288" />
-    </edge>
-    <edge source="A1.port.DBAccessProxy" target="A1.port.Cache" relationship="DEPENDENCY">
-      <point x="-1.5383111315259157E-4" y="-84.00027299703277" />
-      <point x="-17.875" y="722.0" />
-      <point x="-367.322" y="722.0" />
-      <point x="14.99961413406038" y="-84.00027299703277" />
-    </edge>
-    <edge source="A1.HotelRetrieval" target="A1.types.Hotel" relationship="DEPENDENCY">
-      <point x="-139.49975134047952" y="4.747774480620137E-4" />
-      <point x="-334.0" y="330.296" />
-      <point x="-334.0" y="442.5" />
-      <point x="-759.722" y="442.5" />
-      <point x="-9.885612939797284E-6" y="-105.50027299703288" />
-    </edge>
-    <edge source="A1.interfaces.HotelSearch" target="A1.types.Hotel" relationship="DEPENDENCY">
-      <point x="-124.49975134047958" y="-4.2943155045804815E-4" />
-      <point x="-334.0" y="181.589" />
-      <point x="-334.0" y="442.5" />
-      <point x="-759.722" y="442.5" />
-      <point x="-9.885612939797284E-6" y="-105.50027299703288" />
+    <edge source="A1.port.Proxy" target="A1.port.Logger" relationship="DEPENDENCY">
+      <point x="119.5" y="37.5" />
+      <point x="-101.5" y="15.0" />
     </edge>
     <edge source="A1.port.Cache" target="A1.interfaces.Caching" relationship="REALIZATION">
-      <point x="-5.6843418860808015E-14" y="84.0" />
-      <point x="0.0" y="-27.5" />
+      <point x="-77.11320754716985" y="-84.0" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="A1.port.DBAccessProxy" target="A1.port.DBAccess" relationship="DEPENDENCY">
+      <point x="7.0" y="84.0" />
+      <point x="0.0" y="-116.5" />
+    </edge>
+    <edge source="A1.HotelRetrieval" target="A1.port.Proxy" relationship="TO_MANY">
+      <point x="-16.5" y="83.99999999999997" />
+      <point x="0.0" y="-72.5" />
     </edge>
   </edges>
-  <settings layout="Hierarchic" zoom="0.621841155234657" showDependencies="true" x="-304.5" y="698.0" />
+  <settings layout="Hierarchic" zoom="0.6586998087954111" showDependencies="true" x="392.0" y="508.0" />
   <SelectedNodes>
     <node>A1.port.Proxy</node>
     <node>A1.port.Cache</node>
-    <node>A1.types.Hotel</node>
     <node>A1.interfaces.Caching</node>
     <node>A1.port.DBAccessProxy</node>
     <node>A1.HotelRetrieval</node>
-    <node>A1.ConsoleTester</node>
-    <node>A1.port.Logger</node>
     <node>A1.interfaces.HotelSearch</node>
+    <node>A1.port.Logger</node>
     <node>A1.port.DBAccess</node>
   </SelectedNodes>
   <Categories>
