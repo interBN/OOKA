@@ -21,10 +21,16 @@ public class DBAccessProxy extends Proxy {
     }
 
     @Override
-    protected Hotel[] getHotelsProxy( String name) throws Exception {
-        db.openConnection();
-        List<String> response = db.getObjects(DBAccess.HOTEL, name);
-        db.closeConnection();
+    protected Hotel[] getHotelsProxy(String name) throws Exception {
+        List<String> response;
+        try {
+            db.openConnection();
+            response = db.getObjects(DBAccess.HOTEL, name);
+            db.closeConnection();
+        } catch (Exception e) {
+            System.out.println("Error: VPN is probably not active.");
+            throw e;
+        }
         Hotel[] hotels = listToHotels(response);
         Cache.getInstance().cacheResult(name, hotels);
         return hotels;
