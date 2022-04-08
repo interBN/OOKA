@@ -1,23 +1,26 @@
 # Fragen
+
 _1. Welche Aufgabe haben Ports im Kontext eines Komponentendiagramms?_
 
 Antwort:
-Ports sind spezielle Parts in Komponentendiagrammen. Sie beschreiben einen Interaktionspunkt zwischen dem Classifier oder einem Part und seiner Umgebung bzw. das Verhalten zwischen dem Classifier und seinen internen Parts.
-Sie sind Kommunikationsschnittstellen, die den Classifier nach außen abkapseln.
+Ports sind spezielle Parts in Komponentendiagrammen. Sie beschreiben einen Interaktionspunkt zwischen dem Classifier
+oder einem Part und seiner Umgebung bzw. das Verhalten zwischen dem Classifier und seinen internen Parts. Sie sind
+Kommunikationsschnittstellen, die den Classifier nach außen abkapseln.
 
+_2. Wie könnte man deren Aufgabe für eine Komponente in Java implementieren?_
 
-_2. Wie könnte man deren Aufgabe für eine Komponente in Java implementieren?_ 
-
-Antwort: Die Aufgabe eines Ports kann in Java beispielsweise durch öffentliche Methoden, auf die von anderen Klassen aus zugegriffen werden kann, implementiert werden.
+Antwort: Die Aufgabe eines Ports kann in Java beispielsweise durch öffentliche Methoden, auf die von anderen Klassen aus
+zugegriffen werden kann, implementiert werden.
 
 _3. Wie können benötigte bzw. angebotene Interfaces injiziert bzw. entnommen werden?_
 
-Antwort: Es können sowohl angebotene als auch benötigte Interfaces mit mit Parts über Ports und Konnektoren verbunden werden. Angebotene Schnittstellen werden
-durch einen geschlossenen Kreis und benötigte Schnittstellen durch einen geöffneten Kreis symbolisiert.  
+Antwort: Es können sowohl angebotene als auch benötigte Interfaces mit mit Parts über Ports und Konnektoren verbunden
+werden. Angebotene Schnittstellen werden durch einen geschlossenen Kreis und benötigte Schnittstellen durch einen
+geöffneten Kreis symbolisiert.
 
 # UML
 
-![](./UML/uml.png)
+![](./UML/A1.png)
 
 # FA0
 

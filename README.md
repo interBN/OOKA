@@ -16,6 +16,7 @@ https://www.jetbrains.com/idea/download/#section=windows
 
 - Open "Project Structure" and install Project SDK: corletto-1.8
 - Project language level: 8
+- Download Plugin: 
 
 ### VPN
 
@@ -30,10 +31,6 @@ https://openvpn.net/community-downloads/
 ```
 https://portal.inf.h-brs.de/certmk/
 ```
-
-## Maven
-
-- pom.xml
 
 ## Useful links
 
@@ -52,10 +49,10 @@ https://www.draw.io/
 ├───src
 │   ├───.idea
 │   ├───main
-│   │   ├───java
+│   │   ├───java < Codes are here
 │   │   └───resources
 │   └───test
-│       └───java
+│       └───java < Tests are here
 └───target
 ├───classes
 ├───maven-archiver
