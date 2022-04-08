@@ -22,6 +22,10 @@ geöffneten Kreis symbolisiert.
 
 ![](./UML/A1.png)
 
+Die Klasse Hotel wurde für eine bessere Übersicht ausgelagert:
+
+![](./UML/A1_Hotel.png)
+
 # FA0
 
 _Implementieren sie das Port-Konzept nach den Vorgaben bzw. Überlegungen gemäß
