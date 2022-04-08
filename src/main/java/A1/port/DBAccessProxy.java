@@ -5,6 +5,10 @@ import A1.types.Hotel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Siu Cheng
+ * @author Veronika Seidel
+ */
 public class DBAccessProxy extends Proxy {
 
     private static final DBAccessProxy singleton = new DBAccessProxy();

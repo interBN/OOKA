@@ -6,6 +6,10 @@ import A1.types.Hotel;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Siu Cheng
+ * @author Veronika Seidel
+ */
 @SuppressWarnings("unused")
 public class Cache extends Proxy implements Caching {
 

@@ -3,7 +3,11 @@ package A1;
 import java.util.Locale;
 import java.util.Scanner;
 
-public class Main {
+/**
+ * @author Siu Cheng
+ * @author Veronika Seidel
+ */
+public class ConsoleTester {
     public static void main(String[] args) {
         System.out.println("HOTEL SEARCH");
         System.out.println("Info: enter 'exit' to leave");

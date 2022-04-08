@@ -7,6 +7,19 @@ import org.junit.Test;
 public class HotelRetrievalTest {
 
     @Test
+    public void getInstance() {
+        HotelRetrieval instance = HotelRetrieval.getInstance();
+        Assert.assertNotNull(instance);
+    }
+
+    @Test
+    public void getInstance2() {
+        HotelRetrieval instance = HotelRetrieval.getInstance();
+        HotelRetrieval instance2 = HotelRetrieval.getInstance();
+        Assert.assertSame(instance, instance2);
+    }
+
+    @Test
     public void getHotelByName0() {
         HotelRetrieval hr = HotelRetrieval.getInstance();
         String search = "*";

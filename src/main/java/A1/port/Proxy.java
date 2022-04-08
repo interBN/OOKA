@@ -5,6 +5,10 @@ import A1.types.Hotel;
 import java.util.Arrays;
 import java.util.Locale;
 
+/**
+ * @author Siu Cheng
+ * @author Veronika Seidel
+ */
 public abstract class Proxy {
 
     private final Logger logger;

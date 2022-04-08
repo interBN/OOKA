@@ -9,10 +9,19 @@ import A1.types.Hotel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Siu Cheng
+ * @author Veronika Seidel
+ * @see HotelRetrieval is the major class to call from outside
+ */
 public class HotelRetrieval implements HotelSearch {
 
     private static final HotelRetrieval singleton = new HotelRetrieval();
 
+    /**
+     * @see HotelRetrieval#proxies lists all proxies that provide data.
+     * The lower the index the higher the priotity.
+     */
     private final List<Proxy> proxies;
 
     private HotelRetrieval() {
@@ -25,6 +34,10 @@ public class HotelRetrieval implements HotelSearch {
         return singleton;
     }
 
+    /**
+     * @param name name of the hotel
+     * @return list of hotels with substring of name
+     */
     @Override
     public Hotel[] getHotelByName(String name) throws Exception {
         return getHotelByName(name, 0);

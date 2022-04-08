@@ -5,6 +5,10 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * @author Siu Cheng
+ * @author Veronika Seidel
+ */
 public class Logger {
 
     private static Logger instance = null;
@@ -35,12 +39,20 @@ public class Logger {
         }
     }
 
+    /**
+     * Can be called from the debugger.
+     */
+    @SuppressWarnings("unused")
     public void print() {
         for (Long key : logs.keySet()) {
             System.out.println(key + ": " + logs.get(key));
         }
     }
 
+    /**
+     * @param ms 1649416349056L
+     * @return "08.04.22 13:12"
+     */
     public String msToDate(long ms) {
         Date currentDate = new Date(ms);
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy HH:mm");

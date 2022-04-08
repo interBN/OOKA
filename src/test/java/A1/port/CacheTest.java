@@ -20,22 +20,12 @@ public class CacheTest {
     }
 
     @Test
-    public void cacheResult() throws Exception {
+    public void cacheResultAndGetHotelsProxy() {
         Cache instance = Cache.getInstance();
         Hotel[] h = new Hotel[1];
         h[0] = new Hotel(1, "name", "city");
         instance.cacheResult("test", h);
-        Hotel[] h2 = instance.getHotels("test");
-        Assert.assertSame(h, h2);
-    }
-
-    @Test
-    public void getHotelsProxy() {
-        Cache instance = Cache.getInstance();
-        Hotel[] h = new Hotel[1];
-        h[0] = new Hotel(1, "name", "city");
-        instance.cacheResult("test2", h);
-        Hotel[] h2 = instance.getHotelsProxy("test2");
+        Hotel[] h2 = instance.getHotelsProxy("test");
         Assert.assertSame(h, h2);
     }
 }

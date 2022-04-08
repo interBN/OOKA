@@ -1,8 +1,12 @@
 package A1.types;
 
 import java.util.List;
+import java.util.Objects;
 
-@SuppressWarnings("unused")
+/**
+ * @author Siu Cheng
+ * @author Veronika Seidel
+ */
 public class Hotel {
 
     private final int id;
@@ -19,14 +23,17 @@ public class Hotel {
         this.city = city;
     }
 
+    @SuppressWarnings("unused")
     public int getId() {
         return id;
     }
 
+    @SuppressWarnings("unused")
     public String getName() {
         return name;
     }
 
+    @SuppressWarnings("unused")
     public String getCity() {
         return city;
     }
@@ -35,12 +42,10 @@ public class Hotel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Hotel hotel = (Hotel) o;
-
         if (id != hotel.id) return false;
-        if (name != null ? !name.equals(hotel.name) : hotel.name != null) return false;
-        return city != null ? city.equals(hotel.city) : hotel.city == null;
+        if (!Objects.equals(name, hotel.name)) return false;
+        return Objects.equals(city, hotel.city);
     }
 
     @Override
