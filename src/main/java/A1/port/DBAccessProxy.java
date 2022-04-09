@@ -25,7 +25,7 @@ public class DBAccessProxy extends Proxy {
     }
 
     @Override
-    protected Hotel[] getHotelsProxy(String name) throws Exception {
+    Hotel[] getHotelsInProxy(String name) throws Exception {
         List<String> response;
         try {
             db.openConnection();

@@ -25,7 +25,7 @@ public class CacheTest {
         Hotel[] h = new Hotel[1];
         h[0] = new Hotel(1, "name", "city");
         instance.cacheResult("test", h);
-        Hotel[] h2 = instance.getHotelsProxy("test");
+        Hotel[] h2 = instance.getHotelsInProxy("test");
         Assert.assertSame(h, h2);
     }
 }

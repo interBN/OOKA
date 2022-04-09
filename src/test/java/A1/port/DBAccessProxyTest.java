@@ -22,7 +22,7 @@ public class DBAccessProxyTest {
     @Test
     public void getHotelsProxy() throws Exception {
         DBAccessProxy instance = DBAccessProxy.getInstance();
-        Hotel[] h = instance.getHotelsProxy("test");
+        Hotel[] h = instance.getHotelsInProxy("test");
         Assert.assertEquals(0, h.length);
     }
 }

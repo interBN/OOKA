@@ -20,7 +20,7 @@ public abstract class Proxy {
     }
 
     @SuppressWarnings("SameParameterValue")
-    protected abstract Hotel[] getHotelsProxy(String name) throws Exception;
+    abstract Hotel[] getHotelsInProxy(String name) throws Exception;
 
     public Hotel[] getHotels(String name) throws Exception {
 
@@ -28,7 +28,7 @@ public abstract class Proxy {
         String log = String.format("Zugriff auf Buchungssystem über Methode getHotelByName(), \u001B[32mSuchwort: \"%s\", \u001B[33mMethode: %s", name, method);
 
         name = name.toLowerCase(Locale.ROOT);
-        Hotel[] hotels = getHotelsProxy(name);
+        Hotel[] hotels = getHotelsInProxy(name);
 
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;
