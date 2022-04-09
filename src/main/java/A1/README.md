@@ -111,7 +111,9 @@ Da im Ablauf keine NullPointerExceptions geworden werden, muss auch kein Fehlerh
 >
 >Auch das Logging ist eine Querschnittsfunktionalität, die nicht in der Klasse HotelRetrieval enthalten sein soll.
 
-__Antwort:__ Erledigt.
+__Antwort:__
+
+Das Logging erfolgt durch die abstrakte Klasse Proxy. Jede Klasse die von Proxy erbt, wird automatisch im Logging berücksichtigt.
 
 # FA5
 
