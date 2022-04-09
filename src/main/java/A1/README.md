@@ -10,11 +10,11 @@ Kommunikationsschnittstellen, die den Classifier nach außen abkapseln.
 _2. Wie könnte man deren Aufgabe für eine Komponente in Java implementieren?_
 
 Antwort: Die Aufgabe eines Ports kann in Java beispielsweise durch öffentliche Methoden, auf die von anderen Klassen aus
-zugegriffen werden kann, implementiert werden.
+zugegriffen werden kann, implementiert werden. Mit Hilfe von Interfaces können die Methoden zu Verfügung gestellt werden. 
 
 _3. Wie können benötigte bzw. angebotene Interfaces injiziert bzw. entnommen werden?_
 
-Antwort: Es können sowohl angebotene als auch benötigte Interfaces mit mit Parts über Ports und Konnektoren verbunden
+Antwort: Es können sowohl angebotene als auch benötigte Interfaces mit Parts über Ports und Konnektoren verbunden
 werden. Angebotene Schnittstellen werden durch einen geschlossenen Kreis und benötigte Schnittstellen durch einen
 geöffneten Kreis symbolisiert.
 
@@ -32,13 +32,14 @@ _Implementieren sie das Port-Konzept nach den Vorgaben bzw. Überlegungen gemä�
 (Rupp, 2012). Welches Design Pattern sollte hier verwendet werden, um die notwendige Delegation zwischen internen und
 externen Verhalten zu realisieren?_
 
-Antwort:
+__Antwort:__
 
+- Proxy
 - Encapsulated Classifier
 - Adapter???
 - Facade???
 - Singleton
-- MVC???
+- MVC
 - Command???
 
 # FA1
@@ -50,6 +51,13 @@ selber zu bestimmen, die Klasse selber ist in einem separaten Subsystem zu verla
 noch um weitere Methoden erweitert werden? Beachten sie dazu auch die Tutorial-Ausgabe der Klasse DBAccess! Gibt es eine
 dedizierte Reihenfolge beim Aufruf der Methoden des Interfaces?_
 
+__Antwort:__ Als öffentliche Schnittstelle der Komponente Buchungssystem fungiert die Klasse HotelRetrieval über die Objekte des Typen Hotel zurückgegeben werden.
+Über die Schnittstelle können aktuell Hotels über den Hotelnamen gesucht werden. Weitere Methoden für das Interface sind nicht notwendig, aber es könnte beispielsweise
+um eine Suche nach der Stadt erweitert werden. Die Datenbankschnittstelle DBAccess wird über die Klasse DBAccessProxy aufgerufen, wo zuerst die Verbindung geöffnet
+werden muss, bevor eine DB-Abfrage durchgeführt werden kann und schließlich die Verbindung wieder geschlossen wird.
+
+
+
 # FA2
 
 _Die Komponente Buchungssystem benötigt ferner eine Referenz vom Typ Caching, mit der die interne Klasse HotelRetrieval
@@ -57,11 +65,18 @@ die Ergebnisse in einem Cache zwischenspeichern kann. Von außerhalb der Kompone
 erzeugt werden und über den Port injiziert werden. Ist die Schnittstelle Caching hinreichend modelliert oder fehlen auch
 hier Methoden? Implementieren sie die Implementierung eines konkreten Cache rudimentär._
 
+__Antwort:__ Die Abfragen der Datenbank werden über die Klasse "Cache" gespeichert. Wenn also über die Methode "GetHotelByName(String name)" der Klasse
+HotelRetrieval nach Hotels gesucht wird, wird zuerst untersucht, ob eine Abfrage nach dem gleichen Suchwort bereits stattgefunden hatte indem 
+die Liste der Proxies untersucht wird. Auch hier wird die Methode "getHotelByName()" der Schnittstelle zur DB genutzt.  
+
 # FA3
 
 _Überlegen sie auch einen Mechanismus, damit HotelRetrieval stets zumindest scheinbar ohne Probleme (z.B. keine
 NullPointer Exceptions) auf den Cache zugreifen kann, auch wenn keine konkrete Referenz gesetzt ist. Ein etwaiges
 Fehlerhandling darf dabei nicht von der Klasse HotelRetrieval übernommen werden._
+
+__Antwort:__ Wenn nach einem Hotelnamen gesucht wird, wird in jedem Fall der Cache nach Treffern untersucht. Falls nichts im Cache 
+zu finden ist oder es keinen Treffer in der DB gibt, wird "null" als String zurückgegeben (über die Klasse java.util.Arrays).
 
 # FA4
 
@@ -75,7 +90,7 @@ Name. Suchwort: Berg
 
 _Auch das Logging ist eine Querschnittsfunktionalität, die nicht in der Klasse HotelRetrieval enthalten sein soll._
 
-Antwort: done
+__Antwort:__ done
 
 # FA5
 
@@ -83,6 +98,9 @@ _Ihre gesamten Entwicklungen sollen dann als „deploybare“ Komponente im Form
 Entwicklungen hinreichend mit einem externen Client (nicht Teil der deploybaren Komponente!)._
 
 _- Hinweis: bitte an dieser Stelle noch keinen Microservice erzeugen!_
+
+__Antwort:__ Wurde mit JUnit umgesetzt. Tests sind in "src/test/java/A1" zu finden. Die deploybare Komponente kann mit dem Maven-Kommando "mvn package" erstellt
+werden und ist danach in dem Ordner "target" zu finden.
 
 # FA6
 
@@ -93,6 +111,11 @@ navigieren kann, um dann in einem nächsten Schritt ein passendes Interface zu w
 „Suche-Port“ zwei Schnittstellen anbieten, der eine einfache und eine erweiterte Suche ermöglicht. Die eigentliche
 Auswahl auf Client-Seite brauchen sie nicht zu implementieren, sollten aber über Herausforderungen für eine
 Implementierung kurz diskutieren._
+
+__Antwort:__ Die angebotenen Schnittstellen (Ports) der Komponente Buchungssystem sind die einfache und die erweiterte Hotelsuche.
+Man könnte alle verfügbaren "provided Interfaces" (einfache Suche, erweiterte Suche nach zb Ort) als Menge von Strings ausgeben,
+die vom Client zur Navigation genutzt werden kann. Eine Basisklasse für alle Suchfunktionen kann über einen Proxy eine Liste aller möglichen Suchfunktionen
+zurückgeben.
 
 # R1
 
