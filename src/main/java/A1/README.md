@@ -97,7 +97,7 @@ Ablauf:
         - Wandel die Antworten in den Typ Hotel um.
         - Speichere die Hotels im Cache.
         - Gebe die Hotels an HotelRetrieval zurück.
-    - Falls gefunden:
+    - Falls nicht gefunden:
         - Speichere die Antwort im Cache: Suchbegriff "Bla" zeigt auf Hotels [] (leer).
         - Gebe ein leeres Array an HotelRetrieval zurück.
 
