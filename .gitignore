@@ -23,4 +23,9 @@
 hs_err_pid*
 
 # Maven stuff
-target/
+/target/
+
+# User-specific stuff:
+/**/.idea/*
+
+# https://stackoverflow.com/questions/11124053/accidentally-committed-idea-directory-files-into-git
