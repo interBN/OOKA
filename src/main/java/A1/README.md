@@ -14,7 +14,7 @@ Die Lösung kann mit der Klasse ConsoleTester getestet werden. Weitere Hinweise 
 
 **Antwort:**
 
-Ports sind spezielle Parts in Komponentendiagrammen. Sie beschreiben einen Interaktionspunkt zwischen dem Classifier
+Ports sind **spezielle** Parts in Komponentendiagrammen. Sie beschreiben einen Interaktionspunkt zwischen dem Classifier
 oder einem Part und seiner Umgebung bzw. das Verhalten zwischen dem Classifier und seinen internen Parts. Sie sind
 Kommunikationsschnittstellen, die den Classifier nach außen abkapseln.
 
@@ -113,7 +113,8 @@ Da im Ablauf keine NullPointerExceptions geworden werden, muss auch kein Fehlerh
 
 __Antwort:__
 
-Das Logging erfolgt durch die abstrakte Klasse Proxy. Jede Klasse die von Proxy erbt, wird automatisch im Logging berücksichtigt.
+Das Logging erfolgt durch die abstrakte Klasse Proxy. Jede Klasse die von Proxy erbt, wird automatisch im Logging
+berücksichtigt.
 
 # FA5
 
