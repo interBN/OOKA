@@ -102,10 +102,7 @@ public class ComponentAssembler {
     }
 
     public void run() throws IOException, ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        // String path = "src/main/java/A2/resources/Hotel1.jar";
-
         System.out.println("Start Component Assembler");
-
         while (true) {
             System.out.println("------------------------------------------");
             String[] msg = {
