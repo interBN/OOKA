@@ -26,6 +26,5 @@ public class ConsoleTester {
                 e.printStackTrace();
             }
         }
-        scanner.close();
     }
 }
