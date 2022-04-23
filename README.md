@@ -32,6 +32,12 @@ https://openvpn.net/community-downloads/
 https://portal.inf.h-brs.de/certmk/
 ```
 
+## Build jar's in IntelliJ
+
+```
+https://stackoverflow.com/questions/1082580/how-to-build-jars-from-intellij-properly
+```
+
 ## Useful links
 
 Generate UML:

@@ -2,8 +2,9 @@ package A2;
 
 public class Client {
 
-    public static void main(String[] args) throws Exception {
-        ComponentAssembler ca = new ComponentAssembler();
-        ca.run();
+    public static void main(String[] args) {
+        Runnable runnable = new ComponentAssembler();
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 }

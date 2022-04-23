@@ -13,7 +13,7 @@ import java.util.jar.JarFile;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class ComponentAssembler {
+public class ComponentAssembler implements Runnable {
 
     @SuppressWarnings("FieldCanBeLocal")
     private final String pathResources = "src/main/java/A2/resources/";
@@ -23,7 +23,8 @@ public class ComponentAssembler {
         sc = new Scanner(System.in);
     }
 
-    public void run() throws IOException, ClassNotFoundException, InvocationTargetException, IllegalAccessException {
+    @Override
+    public void run() {
         System.out.println("Start Component Assembler");
         while (true) {
             System.out.println("------------------------------------------");
@@ -33,7 +34,11 @@ public class ComponentAssembler {
                 // TODO
                 System.out.println("Status");
             } else if (input == 1) {
-                loadJar();
+                try {
+                    loadJar();
+                } catch (IOException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
             } else if (input == 2) {
                 // TODO
                 System.out.println("Stop Component");
@@ -77,19 +82,19 @@ public class ComponentAssembler {
         if (selectedComponent >= components.length) return;
 
         // SELECT CLASS
-        String[] classes = getClassNamesFromJarFile(pathResources + "/" + components[selectedComponent]);
+        String dirComponent = pathResources + components[selectedComponent];
+        String[] classes = getClassNamesFromJarFile(dirComponent);
         int selectedClass = ask("Please select a class:", classes, Breaker.BACK);
         if (selectedClass >= classes.length) return;
 
         // SELECT METHOD
-        String pathComponent = pathResources + "/" + selectedComponent;
-        String[] methods = getMethods(classes, selectedClass, pathResources + "/" + selectedComponent);
+        String[] methods = getMethods(classes, selectedClass, dirComponent);
         int selectedMethod = ask("Please select method:", methods, Breaker.BACK);
         if (selectedMethod >= methods.length) return;
 
         // RUN METHOD
         // TODO: Java Threads here?
-        runMethod(classes, selectedClass, pathComponent, selectedMethod);
+        runMethod(classes, selectedClass, dirComponent, selectedMethod);
     }
 
     private String[] getJarFiles(String dir) {
