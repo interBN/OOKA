@@ -10,6 +10,7 @@ import java.net.URLClassLoader;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class ComponentAssembler {
@@ -26,16 +27,19 @@ public class ComponentAssembler {
         System.out.println("Start Component Assembler");
         while (true) {
             System.out.println("------------------------------------------");
-            String[] options = {
-                    "show status",
-                    "run component",
-                    "stop component"
-            };
-            String input = ask("Please select number:", options, Breaker.EXIT);
-            if (input.equals((options.length - 1) + "") || input.equals(options[options.length - 1])) {
-                break;
-            } else if (input.equals("1")) {
+            String[] options = {"show status", "run component", "stop component"};
+            int input = ask("Please select number:", options, Breaker.EXIT);
+            if (input == 0) {
+                // TODO
+                System.out.println("Status");
+            } else if (input == 1) {
                 loadJar();
+            } else if (input == 2) {
+                // TODO
+                System.out.println("Stop Component");
+            } else if (input >= options.length) {
+                System.out.println("Goodbye!");
+                break;
             }
         }
     }
@@ -69,45 +73,27 @@ public class ComponentAssembler {
 
         // SELECT COMPONENT
         String[] components = getJarFiles(pathResources);
-        String selectedComponent = ask("Please select a component:", components, Breaker.EXIT);
+        int selectedComponent = ask("Please select a component:", components, Breaker.BACK);
+        if (selectedComponent >= components.length) return;
 
         // SELECT CLASS
-        String[] classes = getClassNamesFromJarFile(pathResources + "/" + components[Integer.parseInt(selectedComponent)]);
-        String selectedClass = ask("Please select a class:", classes, Breaker.EXIT);
+        String[] classes = getClassNamesFromJarFile(pathResources + "/" + components[selectedComponent]);
+        int selectedClass = ask("Please select a class:", classes, Breaker.BACK);
+        if (selectedClass >= classes.length) return;
 
         // SELECT METHOD
         String pathComponent = pathResources + "/" + selectedComponent;
         String[] methods = getMethods(classes, selectedClass, pathResources + "/" + selectedComponent);
-        String selectedMethod = ask("Please select method:", methods, Breaker.EXIT);
+        int selectedMethod = ask("Please select method:", methods, Breaker.BACK);
+        if (selectedMethod >= methods.length) return;
 
         // RUN METHOD
+        // TODO: Java Threads here?
         runMethod(classes, selectedClass, pathComponent, selectedMethod);
     }
 
-    private void runMethod(String[] classes, String selectedClass, String pathComponent, String selectedMethod) throws MalformedURLException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
-        URL url = new File(pathComponent).toURL();
-        URLClassLoader cl = new URLClassLoader(new URL[]{url});
-        Class<?> c = cl.loadClass(classes[Integer.parseInt(selectedClass)]);
-        Method method = c.getDeclaredMethods()[Integer.parseInt(selectedMethod)];
-        String[] args = {"arg1", "arg2"};
-        // Object instance = c.newInstance();
-        // Object result =
-        method.invoke(null, (Object) args);
-    }
-
-    private String[] getMethods(String[] classes, String selectedClass, String dir) throws MalformedURLException, ClassNotFoundException {
-        URL url = new File(dir).toURL();
-        URLClassLoader cl = new URLClassLoader(new URL[]{url});
-        Class<?> c = cl.loadClass(classes[Integer.parseInt(selectedClass)]);
-        Method[] methods = c.getDeclaredMethods();
-        return Arrays.stream(methods).map(Method::getName).toArray(String[]::new);
-    }
-
     private String[] getJarFiles(String dir) {
-        return Stream.of(Objects.requireNonNull(new File(dir).listFiles()))
-                .filter(file -> !file.isDirectory() && file.getName().endsWith(".jar"))
-                .map(File::getName)
-                .toArray(String[]::new);
+        return Stream.of(Objects.requireNonNull(new File(dir).listFiles())).filter(file -> !file.isDirectory() && file.getName().endsWith(".jar")).map(File::getName).toArray(String[]::new);
     }
 
     private String[] getClassNamesFromJarFile(String dir) throws IOException {
@@ -125,21 +111,40 @@ public class ComponentAssembler {
         return set.toArray(new String[0]);
     }
 
+    private String[] getMethods(String[] classes, int selectedClass, String dir) throws MalformedURLException, ClassNotFoundException {
+        URL url = new File(dir).toURL();
+        URLClassLoader cl = new URLClassLoader(new URL[]{url});
+        Class<?> c = cl.loadClass(classes[selectedClass]);
+        Method[] methods = c.getDeclaredMethods();
+        return Arrays.stream(methods).map(Method::getName).toArray(String[]::new);
+    }
 
-    private String ask(String question, String[] options, Breaker breaker) {
+    private void runMethod(String[] classes, int selectedClass, String pathComponent, int selectedMethod) throws MalformedURLException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
+        URL url = new File(pathComponent).toURL();
+        URLClassLoader cl = new URLClassLoader(new URL[]{url});
+        Class<?> c = cl.loadClass(classes[selectedClass]);
+        Method method = c.getDeclaredMethods()[selectedMethod];
+        String[] args = {};
+        // Object instance = c.newInstance();
+        // Object result =
+        method.invoke(null, (Object) args);
+    }
+
+    private int ask(String question, String[] options, Breaker breaker) {
         System.out.println(question);
-        for (int i = 0; i < options.length; i++) {
-            System.out.println("[" + i + "] " + options[i]);
+        IntStream.range(0, options.length).mapToObj(i -> "[" + i + "] " + options[i]).forEach(System.out::println);
+        if (breaker == Breaker.BACK || breaker == Breaker.EXIT) {
+            System.out.println("[" + options.length + "] " + breaker.toString().toLowerCase(Locale.ROOT));
         }
-        if (breaker == Breaker.BACK) {
-            System.out.println("[" + options.length + "] " + Breaker.BACK.toString().toLowerCase(Locale.ROOT));
-        } else if (breaker == Breaker.EXIT) {
-            System.out.println("[" + options.length + "] " + Breaker.EXIT.toString().toLowerCase(Locale.ROOT));
+        int input = sc.nextInt();
+        if (input < 0 || (breaker == Breaker.NONE && input >= options.length) || input >= options.length + 1) {
+            System.out.println("Wrong input.");
+            return ask(question, options, breaker);
         }
-        return sc.nextLine().toLowerCase();
+        return input;
     }
 
     enum Breaker {
-        EXIT, BACK, NONE
+        BACK, EXIT, NONE
     }
 }
