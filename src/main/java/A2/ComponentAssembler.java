@@ -17,10 +17,13 @@ public class ComponentAssembler implements Runnable {
 
     @SuppressWarnings("FieldCanBeLocal")
     private final String pathResources = "src/main/java/A2/resources/";
-    private final Scanner sc;
+    private final Scanner scanner;
+
+    Map<Thread, Runnable> components;
 
     public ComponentAssembler() {
-        sc = new Scanner(System.in);
+        this.scanner = new Scanner(System.in);
+        this.components = new HashMap<>();
     }
 
     @Override
@@ -35,7 +38,7 @@ public class ComponentAssembler implements Runnable {
                 System.out.println("Status");
             } else if (input == 1) {
                 try {
-                    loadJar();
+                    runComponent();
                 } catch (IOException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
@@ -74,7 +77,7 @@ public class ComponentAssembler implements Runnable {
         return arr;
     }*/
 
-    private void loadJar() throws IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
+    private void runComponent() throws IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
 
         // SELECT COMPONENT
         String[] components = getJarFiles(pathResources);
@@ -93,8 +96,16 @@ public class ComponentAssembler implements Runnable {
         if (selectedMethod >= methods.length) return;
 
         // RUN METHOD
-        // TODO: Java Threads here?
-        runMethod(classes, selectedClass, dirComponent, selectedMethod);
+//        runMethod(classes, selectedClass, dirComponent, selectedMethod);
+
+        System.out.println();
+        Component component = new Component(pathResources, components[selectedComponent], classes[selectedClass], methods[selectedMethod]);
+        Thread thread = new Thread(component);
+
+        this.components.put(thread, component);
+
+//        t1.start();
+        System.out.println(component);
     }
 
     private String[] getJarFiles(String dir) {
@@ -141,7 +152,7 @@ public class ComponentAssembler implements Runnable {
         if (breaker == Breaker.BACK || breaker == Breaker.EXIT) {
             System.out.println("[" + options.length + "] " + breaker.toString().toLowerCase(Locale.ROOT));
         }
-        int input = sc.nextInt();
+        int input = scanner.nextInt();
         if (input < 0 || (breaker == Breaker.NONE && input >= options.length) || input >= options.length + 1) {
             System.out.println("Wrong input.");
             return ask(question, options, breaker);
