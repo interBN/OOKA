@@ -19,7 +19,7 @@ public class ComponentAssembler implements Runnable {
     private final String pathResources = "src/main/java/A2/resources/";
     private final Scanner scanner;
 
-    Map<Thread, Runnable> components;
+    Map<Thread, Component> components;
 
     public ComponentAssembler() {
         this.scanner = new Scanner(System.in);
@@ -30,15 +30,14 @@ public class ComponentAssembler implements Runnable {
     public void run() {
         System.out.println("Start Component Assembler");
         while (true) {
-            System.out.println("------------------------------------------");
-            String[] options = {"show status", "run component", "stop component"};
+            System.out.println(Helper.getLine());
+            String[] options = {"show status", "load component", "stop component"};
             int input = ask("Please select number:", options, Breaker.EXIT);
             if (input == 0) {
-                // TODO
-                System.out.println("Status");
+                showStatus();
             } else if (input == 1) {
                 try {
-                    runComponent();
+                    selectComponent();
                 } catch (IOException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
@@ -70,14 +69,25 @@ public class ComponentAssembler implements Runnable {
         return c.newInstance();
     }*/
 
-/*    static <T> T[] append(T[] arr, T element) {
-        final int n = arr.length;
-        arr = Arrays.copyOf(arr, n + 1);
-        arr[n] = element;
-        return arr;
-    }*/
+    /*    static <T> T[] append(T[] arr, T element) {
+            final int n = arr.length;
+            arr = Arrays.copyOf(arr, n + 1);
+            arr[n] = element;
+            return arr;
+        }*/
+    private void showStatus() {
+        System.out.println(Helper.getLine());
+        System.out.println("Status");
+        System.out.println("Running threads: " + components.entrySet().size());
+        int counter = 0;
+        for (Map.Entry<Thread, Component> set : components.entrySet()) {
+            System.out.println(Helper.getLine());
+            System.out.println("Thread #" + counter++);
+            System.out.println(set.getValue());
+        }
+    }
 
-    private void runComponent() throws IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
+    private void selectComponent() throws IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
 
         // SELECT COMPONENT
         String[] components = getJarFiles(pathResources);
@@ -95,17 +105,20 @@ public class ComponentAssembler implements Runnable {
         int selectedMethod = ask("Please select method:", methods, Breaker.BACK);
         if (selectedMethod >= methods.length) return;
 
-        // RUN METHOD
 //        runMethod(classes, selectedClass, dirComponent, selectedMethod);
 
-        System.out.println();
+        // CREATE THREAD
         Component component = new Component(pathResources, components[selectedComponent], classes[selectedClass], methods[selectedMethod]);
         Thread thread = new Thread(component);
-
         this.components.put(thread, component);
-
-//        t1.start();
+        System.out.println(Helper.getLine());
+        System.out.println("A new thread has been created.");
         System.out.println(component);
+
+        // RUN THREAD?
+        if (askYesNo("Start thread?")) {
+            thread.start();
+        }
     }
 
     private String[] getJarFiles(String dir) {
@@ -158,6 +171,12 @@ public class ComponentAssembler implements Runnable {
             return ask(question, options, breaker);
         }
         return input;
+    }
+
+    private boolean askYesNo(String question) {
+        String[] yesNo = new String[]{"yes", "no"};
+        int start = ask("Start thread?", yesNo, Breaker.NONE);
+        return start == 0;
     }
 
     enum Breaker {
