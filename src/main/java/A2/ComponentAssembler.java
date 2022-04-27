@@ -31,10 +31,10 @@ public class ComponentAssembler implements Runnable {
         System.out.println("Start Component Assembler");
         while (true) {
             System.out.println(Helper.getLine());
-            String[] options = {"show status", "load component", "stop component"};
-            int input = ask("Please select number:", options, Breaker.EXIT);
+            String[] options = {"show status", "load component", "unload component", "start component", "stop component"};
+            int input = ask(Helper.GREEN + "Please select number:" + Helper.ANSI_RESET, options, Breaker.EXIT);
             if (input == 0) {
-                showStatus();
+                printStatus();
             } else if (input == 1) {
                 try {
                     selectComponent();
@@ -75,7 +75,7 @@ public class ComponentAssembler implements Runnable {
             arr[n] = element;
             return arr;
         }*/
-    private void showStatus() {
+    private void printStatus() {
         System.out.println(Helper.getLine());
         System.out.println("Status");
         System.out.println("Running threads: " + components.entrySet().size());
@@ -174,9 +174,7 @@ public class ComponentAssembler implements Runnable {
     }
 
     private boolean askYesNo(String question) {
-        String[] yesNo = new String[]{"yes", "no"};
-        int start = ask("Start thread?", yesNo, Breaker.NONE);
-        return start == 0;
+        return ask("Start thread?", new String[]{"yes", "no"}, Breaker.NONE) == 0;
     }
 
     enum Breaker {
