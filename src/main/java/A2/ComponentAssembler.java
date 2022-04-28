@@ -13,9 +13,8 @@ import java.util.jar.JarFile;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-enum Breaker {
-    BACK, EXIT, NONE
-}
+import static A2.Helper.Breaker.*;
+
 
 public class ComponentAssembler implements Runnable {
 
@@ -36,7 +35,7 @@ public class ComponentAssembler implements Runnable {
         while (true) {
             System.out.println(Helper.getLine());
             String[] options = {"show status", "load component", "unload component", "start component", "stop component"};
-            int input = ask(Helper.GREEN + "Please select:" + Helper.ANSI_RESET, options, Breaker.EXIT);
+            int input = ask(Helper.GREEN + "Please select:" + Helper.ANSI_RESET, options, EXIT);
             if (input == 0) { // show status
                 printStatus();
             } else if (input == 1) { // load component
@@ -85,21 +84,19 @@ public class ComponentAssembler implements Runnable {
 
         // SELECT COMPONENT
         String[] components = getJarFiles(pathResources);
-        int selectedComponent = ask("Please select a component:", components, Breaker.BACK);
+        int selectedComponent = ask("Please select a component:", components, BACK);
         if (selectedComponent >= components.length) return;
 
         // SELECT CLASS
         String dirComponent = pathResources + components[selectedComponent];
         String[] classes = getClassNamesFromJarFile(dirComponent);
-        int selectedClass = ask("Please select a class:", classes, Breaker.BACK);
+        int selectedClass = ask("Please select a class:", classes, BACK);
         if (selectedClass >= classes.length) return;
 
         // SELECT METHOD
         String[] methods = getMethods(classes, selectedClass, dirComponent);
-        int selectedMethod = ask("Please select method:", methods, Breaker.BACK);
+        int selectedMethod = ask("Please select a method:", methods, BACK);
         if (selectedMethod >= methods.length) return;
-
-//        runMethod(classes, selectedClass, dirComponent, selectedMethod);
 
         // CREATE THREAD
         Component component = new Component(pathResources, components[selectedComponent], classes[selectedClass], methods[selectedMethod], selectedMethod);
@@ -118,7 +115,7 @@ public class ComponentAssembler implements Runnable {
 
     private void unloadComponent() {
         String[] options = listAllThreads("unload ");
-        int unload = ask("Select to unload: ", options, Breaker.BACK);
+        int unload = ask("Select to unload: ", options, BACK);
         if (unload >= options.length) {
             return;
         }
@@ -133,7 +130,7 @@ public class ComponentAssembler implements Runnable {
 
     private void startComponent() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, MalformedURLException, InterruptedException {
         String[] options = listAllThreads("start ");
-        int start = ask("Select to start: ", options, Breaker.BACK);
+        int start = ask("Select to start: ", options, BACK);
         if (start >= options.length) {
             return;
         }
@@ -147,7 +144,7 @@ public class ComponentAssembler implements Runnable {
 
     private void stopComponent() throws IOException {
         String[] options = listAllThreads("stop ");
-        int start = ask("Select to stop: ", options, Breaker.BACK);
+        int start = ask("Select to stop: ", options, BACK);
         if (start >= options.length) {
             return;
         }
@@ -189,25 +186,14 @@ public class ComponentAssembler implements Runnable {
         return Arrays.stream(methods).map(Method::getName).toArray(String[]::new);
     }
 
-    private void runMethod(String[] classes, int selectedClass, String pathComponent, int selectedMethod) throws MalformedURLException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
-        URL url = new File(pathComponent).toURL();
-        URLClassLoader cl = new URLClassLoader(new URL[]{url});
-        Class<?> c = cl.loadClass(classes[selectedClass]);
-        Method method = c.getDeclaredMethods()[selectedMethod];
-        String[] args = {};
-        // Object instance = c.newInstance();
-        // Object result =
-        method.invoke(null, (Object) args);
-    }
-
-    private int ask(String question, String[] options, Breaker breaker) {
+    private int ask(String question, String[] options, Helper.Breaker breaker) {
         System.out.println(question);
         IntStream.range(0, options.length).mapToObj(i -> "[" + i + "] " + options[i]).forEach(System.out::println);
-        if (breaker == Breaker.BACK || breaker == Breaker.EXIT) {
+        if (breaker == BACK || breaker == EXIT) {
             System.out.println("[" + options.length + "] " + breaker.toString().toLowerCase(Locale.ROOT));
         }
         int input = scanner.nextInt();
-        if (input < 0 || (breaker == Breaker.NONE && input >= options.length) || input >= options.length + 1) {
+        if (input < 0 || (breaker == NONE && input >= options.length) || input >= options.length + 1) {
             System.out.println("Wrong input.");
             return ask(question, options, breaker);
         }
@@ -215,7 +201,7 @@ public class ComponentAssembler implements Runnable {
     }
 
     private boolean askYesNo(String question) {
-        return ask(question, new String[]{"yes", "no"}, Breaker.NONE) == 0;
+        return ask(question, new String[]{"yes", "no"}, NONE) == 0;
     }
 
     public void close() {

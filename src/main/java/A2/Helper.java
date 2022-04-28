@@ -17,7 +17,6 @@ public class Helper {
     static final String PURPLE = "\u001B[35m";
     static final String ANSI_RESET = "\u001B[0m";
 
-
     static String getLine() {
         return "----------------------------------------";
     }
@@ -39,5 +38,9 @@ public class Helper {
         long m = (seconds % 3600) / 60;
         long s = seconds % 60;
         return new long[]{h, m, s};
+    }
+
+    enum Breaker {
+        BACK, EXIT, NONE
     }
 }

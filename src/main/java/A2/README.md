@@ -5,8 +5,8 @@
 **Siehe Client:**
 
 ```
-ComponentAssembler runnable=new ComponentAssembler();
-Thread thread=new Thread(runnable);
+ComponentAssembler runnable = new ComponentAssembler();
+Thread thread = new Thread(runnable);
 thread.start();
 ```
 
@@ -52,7 +52,7 @@ Please select a class:
 [1] Calculator
 [2] back
 0
-Please select method:
+Please select a method:
 [0] main
 [1] isPrime
 [2] back
