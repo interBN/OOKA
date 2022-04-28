@@ -36,7 +36,7 @@ public class ComponentAssembler implements Runnable {
         while (true) {
             System.out.println(Helper.getLine());
             String[] options = {"show status", "load component", "unload component", "start component", "stop component"};
-            int input = ask(Helper.GREEN + "Please select number:" + Helper.ANSI_RESET, options, Breaker.EXIT);
+            int input = ask(Helper.GREEN + "Please select:" + Helper.ANSI_RESET, options, Breaker.EXIT);
             if (input == 0) { // show status
                 printStatus();
             } else if (input == 1) { // load component
@@ -49,14 +49,17 @@ public class ComponentAssembler implements Runnable {
                 unloadComponent();
             } else if (input == 3) { // start component
                 System.out.println("Start Component");
+                startComponent();
             } else if (input == 4) { // stop component
-                System.out.println("Stop Component");
+                stopComponent();
             } else if (input >= options.length) { // exit
                 System.out.println("Goodbye!");
                 break;
             }
         }
     }
+
+
 
 /*    static Object neuesExemplar(String pfad, String klassename) throws Exception {
         URL url = new File(pfad).toURL();
@@ -94,8 +97,7 @@ public class ComponentAssembler implements Runnable {
         }
     }
 
-    private void loadComponent() throws
-            IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
+    private void loadComponent() throws IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
 
         // SELECT COMPONENT
         String[] components = getJarFiles(pathResources);
@@ -130,9 +132,7 @@ public class ComponentAssembler implements Runnable {
     }
 
     private void unloadComponent() {
-        List<String> optionsList = new ArrayList<>();
-        components.forEach((key, component) -> optionsList.add("unload " + component.getId() + "#" + component.getSelectedComponent()));
-        String[] options = optionsList.toArray(String[]::new);
+        String[] options = listAllThreads("unload ");
         int unload = ask("Select to unload: ", options, Breaker.BACK);
         if (unload >= options.length) {
             return;
@@ -143,8 +143,37 @@ public class ComponentAssembler implements Runnable {
         components.remove(thread);
     }
 
+
+    private void startComponent() {
+        String[] options = listAllThreads("start ");
+        int start = ask("Select to start: ", options, Breaker.BACK);
+        if (start >= options.length) {
+            return;
+        }
+        Component[] components = this.components.values().toArray(Component[]::new);
+        Component thread = components[start];
+        thread.startInit();
+    }
+
+    private void stopComponent() {
+        String[] options = listAllThreads("stop ");
+        int start = ask("Select to start: ", options, Breaker.BACK);
+        if (start >= options.length) {
+            return;
+        }
+        Component[] components = this.components.values().toArray(Component[]::new);
+        Component thread = components[start];
+        thread.stopInit();
+    }
+
     private String[] getJarFiles(String dir) {
         return Stream.of(Objects.requireNonNull(new File(dir).listFiles())).filter(file -> !file.isDirectory() && file.getName().endsWith(".jar")).map(File::getName).toArray(String[]::new);
+    }
+
+    private String[] listAllThreads(String prefix) {
+        List<String> optionsList = new ArrayList<>();
+        components.forEach((key, component) -> optionsList.add(prefix + component.getId() + "#" + component.getSelectedComponent() + "#" + component.isActive()));
+        return optionsList.toArray(String[]::new);
     }
 
     private String[] getClassNamesFromJarFile(String dir) throws IOException {
@@ -162,8 +191,7 @@ public class ComponentAssembler implements Runnable {
         return set.toArray(new String[0]);
     }
 
-    private String[] getMethods(String[] classes, int selectedClass, String dir) throws
-            MalformedURLException, ClassNotFoundException {
+    private String[] getMethods(String[] classes, int selectedClass, String dir) throws MalformedURLException, ClassNotFoundException {
         URL url = new File(dir).toURL();
         URLClassLoader cl = new URLClassLoader(new URL[]{url});
         Class<?> c = cl.loadClass(classes[selectedClass]);
@@ -171,8 +199,7 @@ public class ComponentAssembler implements Runnable {
         return Arrays.stream(methods).map(Method::getName).toArray(String[]::new);
     }
 
-    private void runMethod(String[] classes, int selectedClass, String pathComponent, int selectedMethod) throws
-            MalformedURLException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
+    private void runMethod(String[] classes, int selectedClass, String pathComponent, int selectedMethod) throws MalformedURLException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
         URL url = new File(pathComponent).toURL();
         URLClassLoader cl = new URLClassLoader(new URL[]{url});
         Class<?> c = cl.loadClass(classes[selectedClass]);
