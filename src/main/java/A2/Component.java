@@ -13,7 +13,6 @@ public class Component implements Runnable {
     private long activeStart;
     private boolean active;
 
-
     public Component(String componentPath, String selectedComponent, String selectedClass, String selectedMethod) {
         this.componentPath = componentPath;
         this.selectedComponent = selectedComponent;
@@ -23,6 +22,38 @@ public class Component implements Runnable {
         this.created = now();
         this.active = false;
         this.id = toString().hashCode() & 0xfffffff;
+    }
+
+    public String getComponentPath() {
+        return componentPath;
+    }
+
+    public String getSelectedComponent() {
+        return selectedComponent;
+    }
+
+    public String getSelectedClass() {
+        return selectedClass;
+    }
+
+    public String getSelectedMethod() {
+        return selectedMethod;
+    }
+
+    public long getCreated() {
+        return created;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public long getActiveStart() {
+        return activeStart;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     @Override

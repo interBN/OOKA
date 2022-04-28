@@ -13,6 +13,10 @@ import java.util.jar.JarFile;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+enum Breaker {
+    BACK, EXIT, NONE
+}
+
 public class ComponentAssembler implements Runnable {
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -33,18 +37,21 @@ public class ComponentAssembler implements Runnable {
             System.out.println(Helper.getLine());
             String[] options = {"show status", "load component", "unload component", "start component", "stop component"};
             int input = ask(Helper.GREEN + "Please select number:" + Helper.ANSI_RESET, options, Breaker.EXIT);
-            if (input == 0) {
+            if (input == 0) { // show status
                 printStatus();
-            } else if (input == 1) {
+            } else if (input == 1) { // load component
                 try {
-                    selectComponent();
+                    loadComponent();
                 } catch (IOException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
-            } else if (input == 2) {
-                // TODO
+            } else if (input == 2) { // unload component
+                unloadComponent();
+            } else if (input == 3) { // start component
+                System.out.println("Start Component");
+            } else if (input == 4) { // stop component
                 System.out.println("Stop Component");
-            } else if (input >= options.length) {
+            } else if (input >= options.length) { // exit
                 System.out.println("Goodbye!");
                 break;
             }
@@ -87,7 +94,8 @@ public class ComponentAssembler implements Runnable {
         }
     }
 
-    private void selectComponent() throws IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
+    private void loadComponent() throws
+            IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
 
         // SELECT COMPONENT
         String[] components = getJarFiles(pathResources);
@@ -121,6 +129,20 @@ public class ComponentAssembler implements Runnable {
         }
     }
 
+    private void unloadComponent() {
+        List<String> optionsList = new ArrayList<>();
+        components.forEach((key, component) -> optionsList.add("unload " + component.getId() + "#" + component.getSelectedComponent()));
+        String[] options = optionsList.toArray(String[]::new);
+        int unload = ask("Select to unload: ", options, Breaker.BACK);
+        if (unload >= options.length) {
+            return;
+        }
+        Thread[] threads = components.keySet().toArray(Thread[]::new);
+        Thread thread = threads[unload];
+        thread.interrupt();
+        components.remove(thread);
+    }
+
     private String[] getJarFiles(String dir) {
         return Stream.of(Objects.requireNonNull(new File(dir).listFiles())).filter(file -> !file.isDirectory() && file.getName().endsWith(".jar")).map(File::getName).toArray(String[]::new);
     }
@@ -140,7 +162,8 @@ public class ComponentAssembler implements Runnable {
         return set.toArray(new String[0]);
     }
 
-    private String[] getMethods(String[] classes, int selectedClass, String dir) throws MalformedURLException, ClassNotFoundException {
+    private String[] getMethods(String[] classes, int selectedClass, String dir) throws
+            MalformedURLException, ClassNotFoundException {
         URL url = new File(dir).toURL();
         URLClassLoader cl = new URLClassLoader(new URL[]{url});
         Class<?> c = cl.loadClass(classes[selectedClass]);
@@ -148,7 +171,8 @@ public class ComponentAssembler implements Runnable {
         return Arrays.stream(methods).map(Method::getName).toArray(String[]::new);
     }
 
-    private void runMethod(String[] classes, int selectedClass, String pathComponent, int selectedMethod) throws MalformedURLException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
+    private void runMethod(String[] classes, int selectedClass, String pathComponent, int selectedMethod) throws
+            MalformedURLException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
         URL url = new File(pathComponent).toURL();
         URLClassLoader cl = new URLClassLoader(new URL[]{url});
         Class<?> c = cl.loadClass(classes[selectedClass]);
@@ -175,9 +199,5 @@ public class ComponentAssembler implements Runnable {
 
     private boolean askYesNo(String question) {
         return ask("Start thread?", new String[]{"yes", "no"}, Breaker.NONE) == 0;
-    }
-
-    enum Breaker {
-        BACK, EXIT, NONE
     }
 }
