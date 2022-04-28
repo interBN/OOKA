@@ -42,16 +42,26 @@ public class ComponentAssembler implements Runnable {
             } else if (input == 1) { // load component
                 try {
                     loadComponent();
-                } catch (IOException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
+                } catch (IOException | ClassNotFoundException | IllegalAccessException | InvocationTargetException |
+                         InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             } else if (input == 2) { // unload component
                 unloadComponent();
             } else if (input == 3) { // start component
                 System.out.println("Start Component");
-                startComponent();
+                try {
+                    startComponent();
+                } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException |
+                         NoSuchMethodException | MalformedURLException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             } else if (input == 4) { // stop component
-                stopComponent();
+                try {
+                    stopComponent();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             } else if (input >= options.length) { // exit
                 System.out.println("Goodbye!");
                 break;
@@ -59,32 +69,6 @@ public class ComponentAssembler implements Runnable {
         }
     }
 
-
-
-/*    static Object neuesExemplar(String pfad, String klassename) throws Exception {
-        URL url = new File(pfad).toURL();
-        URLClassLoader cl = new URLClassLoader(new URL[]{url});
-        Class<?> c = cl.loadClass(klassename);
-        // Method[] methods = c.getMethods();
-
-        Method method = c.getDeclaredMethod("main", String[].class);
-
-        String[] args = {"arg1", "arg2"};
-        System.out.println("A");
-
-        Object instance = c.newInstance();
-        System.out.println("B");
-        Object result = method.invoke(null, (Object) args);
-
-        return c.newInstance();
-    }*/
-
-    /*    static <T> T[] append(T[] arr, T element) {
-            final int n = arr.length;
-            arr = Arrays.copyOf(arr, n + 1);
-            arr[n] = element;
-            return arr;
-        }*/
     private void printStatus() {
         System.out.println(Helper.getLine());
         System.out.println("Status");
@@ -97,7 +81,7 @@ public class ComponentAssembler implements Runnable {
         }
     }
 
-    private void loadComponent() throws IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
+    private void loadComponent() throws IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InterruptedException {
 
         // SELECT COMPONENT
         String[] components = getJarFiles(pathResources);
@@ -118,7 +102,7 @@ public class ComponentAssembler implements Runnable {
 //        runMethod(classes, selectedClass, dirComponent, selectedMethod);
 
         // CREATE THREAD
-        Component component = new Component(pathResources, components[selectedComponent], classes[selectedClass], methods[selectedMethod]);
+        Component component = new Component(pathResources, components[selectedComponent], classes[selectedClass], methods[selectedMethod], selectedMethod);
         Thread thread = new Thread(component);
         this.components.put(thread, component);
         System.out.println(Helper.getLine());
@@ -128,6 +112,7 @@ public class ComponentAssembler implements Runnable {
         // RUN THREAD?
         if (askYesNo("Start thread?")) {
             thread.start();
+            thread.join();
         }
     }
 
@@ -137,27 +122,32 @@ public class ComponentAssembler implements Runnable {
         if (unload >= options.length) {
             return;
         }
+        Component[] comps = components.values().toArray(Component[]::new);
+        Component component = comps[unload];
+        component.close();
         Thread[] threads = components.keySet().toArray(Thread[]::new);
         Thread thread = threads[unload];
         thread.interrupt();
         components.remove(thread);
     }
 
-
-    private void startComponent() {
+    private void startComponent() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, MalformedURLException, InterruptedException {
         String[] options = listAllThreads("start ");
         int start = ask("Select to start: ", options, Breaker.BACK);
         if (start >= options.length) {
             return;
         }
         Component[] components = this.components.values().toArray(Component[]::new);
-        Component thread = components[start];
-        thread.startInit();
+        Component component = components[start];
+        component.startInit();
+        while (component.isBlock()) {
+            component.wait(1000);
+        }
     }
 
-    private void stopComponent() {
+    private void stopComponent() throws IOException {
         String[] options = listAllThreads("stop ");
-        int start = ask("Select to start: ", options, Breaker.BACK);
+        int start = ask("Select to stop: ", options, Breaker.BACK);
         if (start >= options.length) {
             return;
         }
@@ -225,6 +215,10 @@ public class ComponentAssembler implements Runnable {
     }
 
     private boolean askYesNo(String question) {
-        return ask("Start thread?", new String[]{"yes", "no"}, Breaker.NONE) == 0;
+        return ask(question, new String[]{"yes", "no"}, Breaker.NONE) == 0;
+    }
+
+    public void close() {
+        Thread.currentThread().interrupt();
     }
 }
