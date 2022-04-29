@@ -94,7 +94,7 @@ public class ComponentAssembler implements Runnable {
         if (selectedClass >= classes.length) return;
 
         // SELECT METHOD
-        String[] methods = getMethods(classes, selectedClass, dirComponent);
+        String[] methods = getMethods(classes[selectedClass], dirComponent);
         int selectedMethod = ask("Please select a method:", methods, BACK);
         if (selectedMethod >= methods.length) return;
 
@@ -163,27 +163,49 @@ public class ComponentAssembler implements Runnable {
         return optionsList.toArray(String[]::new);
     }
 
-    private String[] getClassNamesFromJarFile(String dir) throws IOException {
+    /**
+     * source: https://stackoverflow.com/a/11016392
+     */
+    private String[] getClassNamesFromJarFile(String dir) throws IOException, ClassNotFoundException {
         Set<String> set = new HashSet<>();
         JarFile jarFile = new JarFile(dir);
         Enumeration<JarEntry> e = jarFile.entries();
+
+        URL[] urls = {new URL("jar:file:" + dir + "!/")};
+        URLClassLoader cl = URLClassLoader.newInstance(urls);
+
+
         while (e.hasMoreElements()) {
             JarEntry je = e.nextElement();
             if (je.isDirectory() || !je.getName().endsWith(".class")) {
                 continue;
             }
             String className = je.getName().substring(0, je.getName().length() - 6);
+            Class<?> c = cl.loadClass(className);
+            StartClassDeclaration annotation = c.getAnnotation(StartClassDeclaration.class);
+            if (annotation == null) {
+                continue;
+            }
+//            String className = je.getName().substring(0, je.getName().length() - 6);
             set.add(className.replace('/', '.'));
         }
         return set.toArray(new String[0]);
     }
 
-    private String[] getMethods(String[] classes, int selectedClass, String dir) throws MalformedURLException, ClassNotFoundException {
+    private String[] getMethods(String classArg, String dir) throws MalformedURLException, ClassNotFoundException {
         URL url = new File(dir).toURL();
         URLClassLoader cl = new URLClassLoader(new URL[]{url});
-        Class<?> c = cl.loadClass(classes[selectedClass]);
+        Class<?> c = cl.loadClass(classArg);
         Method[] methods = c.getDeclaredMethods();
-        return Arrays.stream(methods).map(Method::getName).toArray(String[]::new);
+        List<String> methodsFiltered = new ArrayList<>();
+        for (Method method : methods) {
+            StartMethodDeclaration annotation2 = method.getDeclaredAnnotation(StartMethodDeclaration.class);
+            if (annotation2 != null) {
+                methodsFiltered.add(method.getName());
+            }
+        }
+//        c.getMethod("main", String[].class)
+        return methodsFiltered.toArray(String[]::new);
     }
 
     private int ask(String question, String[] options, Helper.Breaker breaker) {

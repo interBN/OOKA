@@ -5,7 +5,8 @@ public class PrimeTesterTest {
 
     @Test
     public void isPrime() {
-        boolean prime = PrimeTester.isPrime(1);
+        PrimeTester p = new PrimeTester();
+        boolean prime = p.isPrime(1);
         Assert.assertFalse(prime);
     }
 }

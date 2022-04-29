@@ -1,8 +1,13 @@
+import A2.StartClassDeclaration;
+import A2.StartMethodDeclaration;
+
 import java.util.Scanner;
 
+@StartClassDeclaration
 public class Calculator {
 
-    static void main(String[] args) {
+    @StartMethodDeclaration
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Please enter number: ");
         int a = scanner.nextInt();

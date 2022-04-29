@@ -1,5 +1,15 @@
 # A2
 
+## Troubleshooting
+
+Deactivate annotations processing:
+
+```
+https://stackoverflow.com/questions/27223917/how-to-configure-annotations-processing-in-intellij-idea-14-for-current-project
+```
+
+## Aufgaben
+
 > FA1: Der Component Assembler muss die Laufzeitumgebung starten können.
 
 **Siehe Client:**

@@ -38,6 +38,12 @@ https://portal.inf.h-brs.de/certmk/
 https://stackoverflow.com/questions/1082580/how-to-build-jars-from-intellij-properly
 ```
 
+## Unversion files
+
+```
+https://intellij-support.jetbrains.com/hc/en-us/community/posts/207065035-How-to-move-a-versioned-file-to-unversioned-in-GIT
+```
+
 ## Useful links
 
 Generate UML:
