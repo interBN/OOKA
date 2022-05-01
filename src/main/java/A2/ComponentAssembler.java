@@ -34,7 +34,7 @@ public class ComponentAssembler implements Runnable {
         while (true) {
             System.out.println(Helper.getLine());
             String[] options = {"show status", "load component", "unload component", "start component", "stop component"};
-            int input = ask(Helper.GREEN + "Please select:" + Helper.ANSI_RESET, options, EXIT);
+            int input = ask("Please select:", options, EXIT);
             if (input == 0) { // show status
                 printStatus();
             } else if (input == 1) { // load component
@@ -166,7 +166,15 @@ public class ComponentAssembler implements Runnable {
 
     private String[] listAllThreads(String prefix) {
         List<String> optionsList = new ArrayList<>();
-        components.forEach((key, component) -> optionsList.add(prefix + component.getId() + "#" + component.getSelectedComponent() + "#" + component.isActive()));
+        components.forEach((key, component) -> {
+            String line = prefix
+                    + Helper.BLUE + component.getId() + Helper.ANSI_RESET
+                    + "#"
+                    + Helper.YELLOW + component.getSelectedComponent() + Helper.ANSI_RESET
+                    + "#"
+                    + Helper.RED + component.isActive() + Helper.ANSI_RESET;
+            optionsList.add(line);
+        });
         return optionsList.toArray(String[]::new);
     }
 
@@ -216,14 +224,14 @@ public class ComponentAssembler implements Runnable {
     }
 
     private int ask(String question, String[] options, Helper.Breaker breaker) {
-        System.out.println(question);
+        System.out.println(Helper.GREEN + question + Helper.ANSI_RESET);
         IntStream.range(0, options.length).mapToObj(i -> "[" + i + "] " + options[i]).forEach(System.out::println);
         if (breaker == BACK || breaker == EXIT) {
             System.out.println("[" + options.length + "] " + breaker.toString().toLowerCase(Locale.ROOT));
         }
         int input = scanner.nextInt();
         if (input < 0 || (breaker == NONE && input >= options.length) || input >= options.length + 1) {
-            System.out.println("Wrong input.");
+            System.out.println(Helper.RED + "Wrong input." + Helper.ANSI_RESET);
             return ask(question, options, breaker);
         }
         return input;
