@@ -1,5 +1,8 @@
 # A2
 
+![](uml.png)
+
+
 ## Troubleshooting
 
 Deactivate annotations processing:
@@ -12,7 +15,7 @@ https://stackoverflow.com/questions/27223917/how-to-configure-annotations-proces
 
 > FA1: Der Component Assembler muss die Laufzeitumgebung starten können.
 
-**Siehe Client:**
+**Siehe [Client](Client.java):**
 
 ```
 ComponentAssembler runnable = new ComponentAssembler();
@@ -22,7 +25,7 @@ thread.start();
 
 > FA2: Der Component Assembler muss die Laufzeitumgebung stoppen können.
 
-**Siehe Client:**
+**Siehe [Client](Client.java):**
 
 ```
 ComponentAssembler runnable = new ComponentAssembler();
@@ -85,6 +88,12 @@ Please enter number: 45
 
 > FA4: Der Component Assembler muss eingesetzte Komponenten in der Laufzeitumgebung ausführen können. Eine Start-Methode
 > sollte dabei mit Hilfe einer Annotation im Rahmen eines Komponentenmodells definiert werden.
+
+**Siehe:**
+
+- [StartClassDeclaration](StartClassDeclaration.java)
+- [StartMethodDeclaration](StartMethodDeclaration.java)
+- [StopMethodDeclaration](StopMethodDeclaration.java)
 
 > FA5: Der Component Assembler soll mehrere unterschiedliche Komponenten gleichzeitig (parallel) ausführen können.
 

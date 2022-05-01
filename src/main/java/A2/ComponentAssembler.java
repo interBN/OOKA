@@ -15,7 +15,6 @@ import java.util.stream.Stream;
 
 import static A2.Helper.Breaker.*;
 
-
 public class ComponentAssembler implements Runnable {
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -134,12 +133,20 @@ public class ComponentAssembler implements Runnable {
         if (start >= options.length) {
             return;
         }
+        /*
+          The old thread can be in state TERMINATED.
+          Therefore, we need a new thread to avoid exceptions.
+          The component can be reused.
+         */
         Component[] components = this.components.values().toArray(Component[]::new);
         Component component = components[start];
-        component.startInit();
-        while (component.isBlock()) {
-            component.wait(1000);
-        }
+        Thread[] threads = this.components.keySet().toArray(Thread[]::new);
+        Thread oldThread = threads[start];
+        this.components.remove(oldThread);
+        Thread newThread = new Thread(component);
+        this.components.put(newThread, component);
+        newThread.start();
+        newThread.join();
     }
 
     private void stopComponent() throws IOException {
@@ -164,7 +171,7 @@ public class ComponentAssembler implements Runnable {
     }
 
     /**
-     * source: https://stackoverflow.com/a/11016392
+     * source: <a href="https://stackoverflow.com/a/11016392">https://stackoverflow.com/a/11016392</a>
      */
     private String[] getClassNamesFromJarFile(String dir) throws IOException, ClassNotFoundException {
         Set<String> set = new HashSet<>();
