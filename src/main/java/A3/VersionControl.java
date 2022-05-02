@@ -72,17 +72,27 @@ public class VersionControl {
         return o;
     }
 
-    public void deleteOldSaveFiles() throws IOException {
+    /**
+     * if: keepFiles = 1
+     * and: dir has 3 files: [10, 20, 30]
+     * then: delete files: [10, 20]
+     */
+    public Path[] deleteOldSaveFiles() throws IOException {
         Set<Path> files = listFiles();
         if (files.size() > keepFiles) {
             Path[] delete = Arrays.copyOfRange(files.toArray(Path[]::new), 0, files.size() - keepFiles);
             deleteFiles(delete);
+            return delete;
         }
+        return new Path[]{};
     }
 
 
     /**
      * source: <a href="https://www.baeldung.com/java-list-directory-files">https://www.baeldung.com/java-list-directory-files</a>
+     * if dir has 3 files: [10, 20, 30]
+     *
+     * @return [10, 20, 30]
      */
     public Set<Path> listFiles() throws IOException {
         Set<Path> files = new HashSet<>();
@@ -98,6 +108,11 @@ public class VersionControl {
         return files;
     }
 
+    /**
+     * if dir has 3 files: [10, 20, 30]
+     *
+     * @return 30
+     */
     public Path getLastSaveFile() {
         try {
             return new TreeSet<>(listFiles()).last();
@@ -112,10 +127,6 @@ public class VersionControl {
 
     public void deleteFile(Path file) {
         File myObj = new File(file.toString());
-        if (myObj.delete()) {
-            System.out.println("Deleted the file: " + myObj.getName());
-        } else {
-            System.out.println("Failed to delete the file.");
-        }
+        System.out.println(myObj.delete() ? "Deleted the file: " + myObj.getName() : "Failed to delete the file.");
     }
 }

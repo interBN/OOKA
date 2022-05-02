@@ -12,7 +12,7 @@ public class Client {
         System.out.println(p1);
         Path serialize = v.serialize(p1);
         try {
-            v.deleteOldSaveFiles();
+            Path[] deletedFiles = v.deleteOldSaveFiles();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
