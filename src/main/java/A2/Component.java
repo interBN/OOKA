@@ -7,12 +7,6 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import static A2.Helper.*;
 
@@ -77,30 +71,30 @@ public class Component implements Runnable {
         active = false;
     }
 
-    public String[] getClasses() throws IOException {
-        String dir = getComponentPath() + getSelectedComponent();
-        Set<String> set = new HashSet<>();
-        JarFile jarFile = new JarFile(dir);
-        Enumeration<JarEntry> e = jarFile.entries();
-        while (e.hasMoreElements()) {
-            JarEntry je = e.nextElement();
-            if (je.isDirectory() || !je.getName().endsWith(".class")) {
-                continue;
-            }
-            String className = je.getName().substring(0, je.getName().length() - 6);
-            set.add(className.replace('/', '.'));
-        }
-        return set.toArray(new String[0]);
-    }
-
-    public String[] getMethods(String className) throws IOException, ClassNotFoundException {
-        String dir = getComponentPath() + getSelectedComponent();
-        URL url = new File(dir).toURL();
-        URLClassLoader cl = new URLClassLoader(new URL[]{url});
-        Class<?> c = cl.loadClass(className);
-        Method[] methods = c.getDeclaredMethods();
-        return Arrays.stream(methods).map(Method::getName).toArray(String[]::new);
-    }
+//    public String[] getClasses() throws IOException {
+//        String dir = getComponentPath() + getSelectedComponent();
+//        Set<String> set = new HashSet<>();
+//        JarFile jarFile = new JarFile(dir);
+//        Enumeration<JarEntry> e = jarFile.entries();
+//        while (e.hasMoreElements()) {
+//            JarEntry je = e.nextElement();
+//            if (je.isDirectory() || !je.getName().endsWith(".class")) {
+//                continue;
+//            }
+//            String className = je.getName().substring(0, je.getName().length() - 6);
+//            set.add(className.replace('/', '.'));
+//        }
+//        return set.toArray(new String[0]);
+//    }
+//
+//    public String[] getMethods(String className) throws IOException, ClassNotFoundException {
+//        String dir = getComponentPath() + getSelectedComponent();
+//        URL url = new File(dir).toURL();
+//        URLClassLoader cl = new URLClassLoader(new URL[]{url});
+//        Class<?> c = cl.loadClass(className);
+//        Method[] methods = c.getDeclaredMethods();
+//        return Arrays.stream(methods).map(Method::getName).toArray(String[]::new);
+//    }
 
     @Override
     public String toString() {

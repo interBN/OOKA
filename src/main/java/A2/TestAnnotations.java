@@ -3,7 +3,7 @@ package A2;
 import java.lang.reflect.Method;
 
 /**
- * source: https://jenkov.com/tutorials/java-reflection/annotations.html
+ * source: <a href="https://jenkov.com/tutorials/java-reflection/annotations.html">https://jenkov.com/tutorials/java-reflection/annotations.html</a>
  */
 @StartClassDeclaration(arg2 = "Hello World")
 public class TestAnnotations {
