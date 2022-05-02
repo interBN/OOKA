@@ -3,7 +3,7 @@ package A2;
 public class Client {
 
     public static void main(String[] args) {
-        ComponentAssembler runnable = new ComponentAssembler();
+        ComponentAssembler runnable = ComponentAssembler.getInstance();
         Thread thread = new Thread(runnable);
         thread.start();
         try {
