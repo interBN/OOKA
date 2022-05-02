@@ -1,12 +1,17 @@
 package A2;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -17,15 +22,22 @@ import static A2.Helper.Breaker.*;
 
 public class ComponentAssembler implements Runnable {
 
+    private static ComponentAssembler singleton = null;
     @SuppressWarnings("FieldCanBeLocal")
     private final String pathResources = "src/main/java/A2/resources/";
     private final Scanner scanner;
-
     Map<Thread, Component> components;
 
-    public ComponentAssembler() {
+    private ComponentAssembler() {
         this.scanner = new Scanner(System.in);
         this.components = new HashMap<>();
+    }
+
+    public static ComponentAssembler getInstance() {
+        if (singleton == null) {
+            singleton = new ComponentAssembler();
+        }
+        return singleton;
     }
 
     @Override
@@ -243,5 +255,46 @@ public class ComponentAssembler implements Runnable {
 
     public void close() {
         Thread.currentThread().interrupt();
+    }
+
+    /**
+     * source: <a href="https://stackoverflow.com/questions/13063815/save-xml-file-with-xstream">https://stackoverflow.com/questions/13063815/save-xml-file-with-xstream</a>
+     */
+    public void serialize() {
+        XStream xstream = new XStream(new DomDriver());
+        String xml = xstream.toXML(this);
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream("myfilename.xml");
+            fos.write("<?xml version=\"1.0\"?>".getBytes(StandardCharsets.UTF_8)); //write XML header, as XStream doesn't do that for us
+            byte[] bytes = xml.getBytes(StandardCharsets.UTF_8);
+            fos.write(bytes);
+
+        } catch (Exception e) {
+            e.printStackTrace(); // this obviously needs to be refined.
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace(); // this obviously needs to be refined.
+                }
+            }
+        }
+    }
+
+    /**
+     * source: <a href="https://stackoverflow.com/questions/13063815/save-xml-file-with-xstream">https://stackoverflow.com/questions/13063815/save-xml-file-with-xstream</a>
+     */
+    public ComponentAssembler deserialize() {
+        XStream xstream = new XStream(new DomDriver());
+        ComponentAssembler componentAssembler = new ComponentAssembler(); //if there is an error during deserialization, this is going to be returned, is this what you want?
+        try {
+            File xmlFile = new File("myfilename.xml");
+            componentAssembler = (ComponentAssembler) xstream.fromXML(xmlFile);
+        } catch (Exception e) {
+            System.err.println("Error in XML Read: " + e.getMessage());
+        }
+        return componentAssembler;
     }
 }
