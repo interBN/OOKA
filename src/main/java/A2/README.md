@@ -1,6 +1,6 @@
 # A2
 
-![](uml.png)
+![](resources/uml.png)
 
 
 ## Troubleshooting

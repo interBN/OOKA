@@ -1,4 +1,4 @@
-package A2;
+package A2.annotations;
 
 import java.lang.reflect.Method;
 

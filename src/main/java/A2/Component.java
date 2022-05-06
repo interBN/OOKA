@@ -17,7 +17,6 @@ public class Component implements Runnable {
     private final String selectedClass;
     private final String selectedMethod;
     private final int selectedMethodIndex;
-
     private final long created;
     private final int id;
     private boolean active;

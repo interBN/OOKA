@@ -1,5 +1,7 @@
 package A2;
 
+import A2.annotations.StartClassDeclaration;
+import A2.annotations.StartMethodDeclaration;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
@@ -200,7 +202,6 @@ public class ComponentAssembler implements Runnable {
 
         URL[] urls = {new URL("jar:file:" + dir + "!/")};
         URLClassLoader cl = URLClassLoader.newInstance(urls);
-
 
         while (e.hasMoreElements()) {
             JarEntry je = e.nextElement();
