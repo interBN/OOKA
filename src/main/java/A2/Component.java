@@ -2,6 +2,7 @@ package A2;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -53,6 +54,7 @@ public class Component implements Runnable {
         classLoader = new URLClassLoader(new URL[]{url});
         Class<?> c = classLoader.loadClass(this.selectedClass);
         Method method = c.getDeclaredMethods()[this.selectedMethodIndex];
+        inject(c);
         String[] args = {};
         method.invoke(null, (Object) args);
         activeTime = now();
@@ -68,6 +70,21 @@ public class Component implements Runnable {
         }
         activeTime = -1;
         active = false;
+    }
+
+
+    void inject(Class<?> c){
+//        Class<?> c = object.getClass();
+        for (Field field: c.getDeclaredFields()) {
+            if (field.isAnnotationPresent(A3.Inject.class)){
+                try {
+                    field.set(null, new A3.Logger());
+                }
+                catch (Exception e){
+                    System.err.println("Error injecting Object: " + e.getMessage());
+                }
+            }
+        }
     }
 
 //    public String[] getClasses() throws IOException {
