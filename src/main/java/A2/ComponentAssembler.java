@@ -30,7 +30,7 @@ public class ComponentAssembler implements Runnable {
     private final Scanner scanner;
     Map<Thread, Component> components;
 
-    private ComponentAssembler() {
+    ComponentAssembler() {
         this.scanner = new Scanner(System.in);
         this.components = new HashMap<>();
     }
@@ -81,7 +81,7 @@ public class ComponentAssembler implements Runnable {
         }
     }
 
-    private void printStatus() {
+    void printStatus() {
         System.out.println(Helper.getLine());
         System.out.println("Status");
         System.out.println("Running threads: " + components.entrySet().size());
@@ -93,7 +93,7 @@ public class ComponentAssembler implements Runnable {
         }
     }
 
-    private void loadComponent() throws IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InterruptedException {
+    void loadComponent() throws IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InterruptedException {
 
         // SELECT COMPONENT
         String[] components = getJarFiles(pathResources);
@@ -126,7 +126,7 @@ public class ComponentAssembler implements Runnable {
         }
     }
 
-    private void unloadComponent() {
+    void unloadComponent() {
         String[] options = listAllThreads("unload ");
         int unload = ask("Select to unload: ", options, BACK);
         if (unload >= options.length) {
@@ -141,7 +141,7 @@ public class ComponentAssembler implements Runnable {
         components.remove(thread);
     }
 
-    private void startComponent() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, MalformedURLException, InterruptedException {
+    void startComponent() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, MalformedURLException, InterruptedException {
         String[] options = listAllThreads("start ");
         int start = ask("Select to start: ", options, BACK);
         if (start >= options.length) {
@@ -163,7 +163,7 @@ public class ComponentAssembler implements Runnable {
         newThread.join();
     }
 
-    private void stopComponent() throws IOException {
+    void stopComponent() throws IOException {
         String[] options = listAllThreads("stop ");
         int start = ask("Select to stop: ", options, BACK);
         if (start >= options.length) {
@@ -236,7 +236,7 @@ public class ComponentAssembler implements Runnable {
         return methodsFiltered.toArray(String[]::new);
     }
 
-    private int ask(String question, String[] options, Helper.Breaker breaker) {
+    int ask(String question, String[] options, Helper.Breaker breaker) {
         System.out.println(Helper.GREEN + question + Helper.ANSI_RESET);
         IntStream.range(0, options.length).mapToObj(i -> "[" + i + "] " + options[i]).forEach(System.out::println);
         if (breaker == BACK || breaker == EXIT) {

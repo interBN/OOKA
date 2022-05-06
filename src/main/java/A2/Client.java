@@ -3,15 +3,7 @@ package A2;
 public class Client {
 
     public static void main(String[] args) {
-        ComponentAssembler runnable = ComponentAssembler.getInstance();
-        Thread thread = new Thread(runnable);
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        runnable.close();
-        thread.interrupt();
+        CLI cli = new CLI();
+        cli.loop();
     }
 }
