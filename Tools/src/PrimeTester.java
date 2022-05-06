@@ -1,6 +1,6 @@
-import A2.StartClassDeclaration;
-import A2.StartMethodDeclaration;
-import A2.StopMethodDeclaration;
+import A2.annotations.StartClassDeclaration;
+import A2.annotations.StartMethodDeclaration;
+import A2.annotations.StopMethodDeclaration;
 
 import java.util.Locale;
 import java.util.Map;

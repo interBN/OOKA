@@ -2,37 +2,38 @@ package A2;
 
 import A2.annotations.StartClassDeclaration;
 import A2.annotations.StartMethodDeclaration;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import A3.VersionControl;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static A2.Helper.Breaker.*;
+import static A2.Helper.now;
 
 public class ComponentAssembler implements Runnable {
 
-    private static ComponentAssembler singleton = null;
+    static ComponentAssembler singleton = null;
+    //    boolean killInstance = false;
+//    final long created;
+    VersionControl versionControl;
     @SuppressWarnings("FieldCanBeLocal")
-    private final String pathResources = "src/main/java/A2/resources/";
-    private final Scanner scanner;
     Map<Thread, Component> components;
+    Options options;
 
-    ComponentAssembler() {
-        this.scanner = new Scanner(System.in);
+    private ComponentAssembler() {
         this.components = new HashMap<>();
+        versionControl = new VersionControl("src/main/java/A2/saves", 3);
+        options = new Options();
+        options.created = now();
+
     }
 
     public static ComponentAssembler getInstance() {
@@ -44,39 +45,12 @@ public class ComponentAssembler implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Start Component Assembler");
-        while (true) {
-            System.out.println(Helper.getLine());
-            String[] options = {"show status", "load component", "unload component", "start component", "stop component"};
-            int input = ask("Please select:", options, EXIT);
-            if (input == 0) { // show status
-                printStatus();
-            } else if (input == 1) { // load component
-                try {
-                    loadComponent();
-                } catch (IOException | ClassNotFoundException | IllegalAccessException | InvocationTargetException |
-                         InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            } else if (input == 2) { // unload component
-                unloadComponent();
-            } else if (input == 3) { // start component
-                System.out.println("Start Component");
-                try {
-                    startComponent();
-                } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException |
-                         NoSuchMethodException | MalformedURLException | InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            } else if (input == 4) { // stop component
-                try {
-                    stopComponent();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            } else if (input >= options.length) { // exit
-                System.out.println("Goodbye!");
-                break;
+        ComponentAssembler instance = getInstance();
+        while (!options.killInstance) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -93,100 +67,55 @@ public class ComponentAssembler implements Runnable {
         }
     }
 
-    void loadComponent() throws IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InterruptedException {
-
-        // SELECT COMPONENT
-        String[] components = getJarFiles(pathResources);
-        int selectedComponent = ask("Please select a component:", components, BACK);
-        if (selectedComponent >= components.length) return;
-
-        // SELECT CLASS
-        String dirComponent = pathResources + components[selectedComponent];
-        String[] classes = getClassNamesFromJarFile(dirComponent);
-        int selectedClass = ask("Please select a class:", classes, BACK);
-        if (selectedClass >= classes.length) return;
-
-        // SELECT METHOD
-        String[] methods = getMethods(classes[selectedClass], dirComponent);
-        int selectedMethod = ask("Please select a method:", methods, BACK);
-        if (selectedMethod >= methods.length) return;
-
-        // CREATE THREAD
-        Component component = new Component(pathResources, components[selectedComponent], classes[selectedClass], methods[selectedMethod], selectedMethod);
+    void loadComponent(Component component) throws IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InterruptedException {
         Thread thread = new Thread(component);
         this.components.put(thread, component);
         System.out.println(Helper.getLine());
         System.out.println("A new thread has been created.");
         System.out.println(component);
-
-        // RUN THREAD?
-        if (askYesNo("Start thread?")) {
-            thread.start();
-            thread.join();
-        }
     }
 
-    void unloadComponent() {
-        String[] options = listAllThreads("unload ");
-        int unload = ask("Select to unload: ", options, BACK);
-        if (unload >= options.length) {
-            return;
-        }
-        Component[] comps = components.values().toArray(Component[]::new);
-        Component component = comps[unload];
+    void unloadComponent(Component component) {
+        Thread thread = findThread(component);
+        assert thread != null;
         component.close();
-        Thread[] threads = components.keySet().toArray(Thread[]::new);
-        Thread thread = threads[unload];
         thread.interrupt();
         components.remove(thread);
     }
 
-    void startComponent() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, MalformedURLException, InterruptedException {
-        String[] options = listAllThreads("start ");
-        int start = ask("Select to start: ", options, BACK);
-        if (start >= options.length) {
-            return;
-        }
-        /*
-          The old thread can be in state TERMINATED.
-          Therefore, we need a new thread to avoid exceptions.
-          The component can be reused.
-         */
-        Component[] components = this.components.values().toArray(Component[]::new);
-        Component component = components[start];
-        Thread[] threads = this.components.keySet().toArray(Thread[]::new);
-        Thread oldThread = threads[start];
-        this.components.remove(oldThread);
+    void startComponent(Component component) throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, MalformedURLException, InterruptedException {
+        Thread thread = findThread(component);
+        this.components.remove(thread);
         Thread newThread = new Thread(component);
         this.components.put(newThread, component);
         newThread.start();
         newThread.join();
     }
 
-    void stopComponent() throws IOException {
-        String[] options = listAllThreads("stop ");
-        int start = ask("Select to stop: ", options, BACK);
-        if (start >= options.length) {
-            return;
-        }
-        Component[] components = this.components.values().toArray(Component[]::new);
-        Component thread = components[start];
-        thread.stopInit();
+    void stopComponent(Component component) throws IOException {
+        component.stopInit();
     }
 
-    private String[] getJarFiles(String dir) {
+    private Thread findThread(Component component) {
+        Thread thread = null;
+        for (Map.Entry<Thread, Component> entry : components.entrySet()) {
+            Thread key = entry.getKey();
+            Component value = entry.getValue();
+            if (value.equals(component)) {
+                return key;
+            }
+        }
+        return thread;
+    }
+
+    String[] getJarFiles(String dir) {
         return Stream.of(Objects.requireNonNull(new File(dir).listFiles())).filter(file -> !file.isDirectory() && file.getName().endsWith(".jar")).map(File::getName).toArray(String[]::new);
     }
 
-    private String[] listAllThreads(String prefix) {
+    String[] listAllThreads(String prefix) {
         List<String> optionsList = new ArrayList<>();
         components.forEach((key, component) -> {
-            String line = prefix
-                    + Helper.BLUE + component.getId() + Helper.ANSI_RESET
-                    + "#"
-                    + Helper.YELLOW + component.getSelectedComponent() + Helper.ANSI_RESET
-                    + "#"
-                    + Helper.RED + component.isActive() + Helper.ANSI_RESET;
+            String line = prefix + Helper.BLUE + component.getId() + Helper.ANSI_RESET + "#" + Helper.YELLOW + component.getSelectedComponent() + Helper.ANSI_RESET + "#" + Helper.RED + component.isActive() + Helper.ANSI_RESET;
             optionsList.add(line);
         });
         return optionsList.toArray(String[]::new);
@@ -195,7 +124,7 @@ public class ComponentAssembler implements Runnable {
     /**
      * source: <a href="https://stackoverflow.com/a/11016392">https://stackoverflow.com/a/11016392</a>
      */
-    private String[] getClassNamesFromJarFile(String dir) throws IOException, ClassNotFoundException {
+    String[] getClassNamesFromJarFile(String dir) throws IOException, ClassNotFoundException {
         Set<String> set = new HashSet<>();
         JarFile jarFile = new JarFile(dir);
         Enumeration<JarEntry> e = jarFile.entries();
@@ -220,7 +149,7 @@ public class ComponentAssembler implements Runnable {
         return set.toArray(new String[0]);
     }
 
-    private String[] getMethods(String classArg, String dir) throws MalformedURLException, ClassNotFoundException {
+    String[] getMethods(String classArg, String dir) throws MalformedURLException, ClassNotFoundException {
         URL url = new File(dir).toURL();
         URLClassLoader cl = new URLClassLoader(new URL[]{url});
         Class<?> c = cl.loadClass(classArg);
@@ -236,66 +165,20 @@ public class ComponentAssembler implements Runnable {
         return methodsFiltered.toArray(String[]::new);
     }
 
-    int ask(String question, String[] options, Helper.Breaker breaker) {
-        System.out.println(Helper.GREEN + question + Helper.ANSI_RESET);
-        IntStream.range(0, options.length).mapToObj(i -> "[" + i + "] " + options[i]).forEach(System.out::println);
-        if (breaker == BACK || breaker == EXIT) {
-            System.out.println("[" + options.length + "] " + breaker.toString().toLowerCase(Locale.ROOT));
-        }
-        int input = scanner.nextInt();
-        if (input < 0 || (breaker == NONE && input >= options.length) || input >= options.length + 1) {
-            System.out.println(Helper.RED + "Wrong input." + Helper.ANSI_RESET);
-            return ask(question, options, breaker);
-        }
-        return input;
-    }
-
-    private boolean askYesNo(String question) {
-        return ask(question, new String[]{"yes", "no"}, NONE) == 0;
-    }
-
     public void close() {
+        options.killInstance = true;
         Thread.currentThread().interrupt();
     }
 
-    /**
-     * source: <a href="https://stackoverflow.com/questions/13063815/save-xml-file-with-xstream">https://stackoverflow.com/questions/13063815/save-xml-file-with-xstream</a>
-     */
-    public void serialize() {
-        XStream xstream = new XStream(new DomDriver());
-        String xml = xstream.toXML(this);
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream("myfilename.xml");
-            fos.write("<?xml version=\"1.0\"?>".getBytes(StandardCharsets.UTF_8)); //write XML header, as XStream doesn't do that for us
-            byte[] bytes = xml.getBytes(StandardCharsets.UTF_8);
-            fos.write(bytes);
-
-        } catch (Exception e) {
-            e.printStackTrace(); // this obviously needs to be refined.
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace(); // this obviously needs to be refined.
-                }
-            }
-        }
+    void serialize() {
+        versionControl.serialize(options);
     }
 
-    /**
-     * source: <a href="https://stackoverflow.com/questions/13063815/save-xml-file-with-xstream">https://stackoverflow.com/questions/13063815/save-xml-file-with-xstream</a>
-     */
-    public ComponentAssembler deserialize() {
-        XStream xstream = new XStream(new DomDriver());
-        ComponentAssembler componentAssembler = new ComponentAssembler(); //if there is an error during deserialization, this is going to be returned, is this what you want?
-        try {
-            File xmlFile = new File("myfilename.xml");
-            componentAssembler = (ComponentAssembler) xstream.fromXML(xmlFile);
-        } catch (Exception e) {
-            System.err.println("Error in XML Read: " + e.getMessage());
-        }
-        return componentAssembler;
+    public class Options {
+        long created;
+        boolean killInstance = false;
+//        VersionControl versionControl;
+
     }
+
 }

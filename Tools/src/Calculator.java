@@ -1,5 +1,5 @@
-import A2.StartClassDeclaration;
-import A2.StartMethodDeclaration;
+import A2.annotations.StartClassDeclaration;
+import A2.annotations.StartMethodDeclaration;
 
 import java.util.Scanner;
 

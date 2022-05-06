@@ -12,18 +12,18 @@ import static A2.Helper.*;
 
 public class Component implements Runnable {
 
-    private final String componentPath;
-    private final String selectedComponent;
-    private final String selectedClass;
-    private final String selectedMethod;
-    private final int selectedMethodIndex;
-    private final long created;
-    private final int id;
-    private boolean active;
-    private long activeTime;
+    final String componentPath;
+    final String selectedComponent;
+    final String selectedClass;
+    final String selectedMethod;
+    final int selectedMethodIndex;
+    final long created;
+    final int id;
+    boolean active;
+    long activeTime;
 
-    private URLClassLoader classLoader;
-    private boolean block = false;
+    URLClassLoader classLoader;
+    boolean block = false;
 
     public Component(String componentPath, String selectedComponent, String selectedClass, String selectedMethod, int selectedMethodIndex) {
         this.componentPath = componentPath;

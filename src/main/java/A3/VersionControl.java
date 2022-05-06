@@ -29,7 +29,7 @@ public class VersionControl {
      * source: <a href="https://stackoverflow.com/questions/13063815/save-xml-file-with-xstream">https://stackoverflow.com/questions/13063815/save-xml-file-with-xstream</a>
      */
     public Path serialize(Object o) {
-        Class<?>[] classes = new Class[]{Person.class};
+        Class<?>[] classes = new Class[]{ComponentAssembler.Options.class};
         XStream xstream = new XStream(new DomDriver());
         xstream.allowTypes(classes);
         String xml = xstream.toXML(o);
