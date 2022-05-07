@@ -1,12 +1,17 @@
+import A2.annotations.StartClassDeclaration;
+import A2.annotations.StartMethodDeclaration;
+import A2.annotations.StopMethodDeclaration;
 import A3.Inject;
 import A3.Logger;
 
+@StartClassDeclaration
 public class State {
     @Inject
     public static Logger logger;
     static boolean kill;
     static States currentState;
 
+    @StartMethodDeclaration
     public static void main(String[] args) {
         kill = false;
         currentState = States.STATE_A;
@@ -35,6 +40,7 @@ public class State {
         }
     }
 
+    @StopMethodDeclaration
     enum States {
         STATE_A, STATE_B, STATE_C,
     }

@@ -1,7 +1,6 @@
 package A2;
 
 import A3.Logger;
-import A3.Timer;
 
 import java.io.File;
 import java.io.IOException;
