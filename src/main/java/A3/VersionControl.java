@@ -16,20 +16,25 @@ import java.util.*;
 public class VersionControl {
 
     private final String dir;
-    private final String filename = "save_";
+    private final String filename;
     private final String type = ".xml";
     private final int keepFiles;
 
+
     public VersionControl(String dir, int keepFiles) {
+        this(dir, "save_", keepFiles);
+    }
+
+    public VersionControl(String dir, String filenamePrefix, int keepFiles) {
         this.dir = dir;
+        this.filename = filenamePrefix;
         this.keepFiles = keepFiles;
     }
 
     /**
      * source: <a href="https://stackoverflow.com/questions/13063815/save-xml-file-with-xstream">https://stackoverflow.com/questions/13063815/save-xml-file-with-xstream</a>
      */
-    public Path serialize(Object o) {
-        Class<?>[] classes = new Class[]{ComponentAssembler.Options.class};
+    public Path serialize(Object o, Class<?>[] classes) {
         XStream xstream = new XStream(new DomDriver());
         xstream.allowTypes(classes);
         String xml = xstream.toXML(o);

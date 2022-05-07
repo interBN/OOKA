@@ -3,6 +3,7 @@ package A2;
 import A2.annotations.StartClassDeclaration;
 import A2.annotations.StartMethodDeclaration;
 import A3.VersionControl;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,16 +25,17 @@ public class ComponentAssembler implements Runnable {
     //    boolean killInstance = false;
 //    final long created;
     VersionControl versionControl;
+    @XStreamOmitField
     @SuppressWarnings("FieldCanBeLocal")
     Map<Thread, Component> components;
-    Options options;
+
+    long created;
+    boolean killInstance = false;
 
     private ComponentAssembler() {
         this.components = new HashMap<>();
-        versionControl = new VersionControl("src/main/java/A2/saves", 3);
-        options = new Options();
-        options.created = now();
-
+        this.versionControl = new VersionControl("src/main/java/A2/saves", 3);
+        this.created = now();
     }
 
     public static ComponentAssembler getInstance() {
@@ -46,7 +48,7 @@ public class ComponentAssembler implements Runnable {
     @Override
     public void run() {
         ComponentAssembler instance = getInstance();
-        while (!options.killInstance) {
+        while (!killInstance) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -166,19 +168,12 @@ public class ComponentAssembler implements Runnable {
     }
 
     public void close() {
-        options.killInstance = true;
+        killInstance = true;
         Thread.currentThread().interrupt();
     }
 
-    void serialize() {
-        versionControl.serialize(options);
+    void serializeComponents() {
+        Class<?>[] classes = new Class[]{Component.class};
+        versionControl.serialize(components.values().toArray(), classes);
     }
-
-    public class Options {
-        long created;
-        boolean killInstance = false;
-//        VersionControl versionControl;
-
-    }
-
 }

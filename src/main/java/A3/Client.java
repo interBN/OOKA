@@ -10,7 +10,8 @@ public class Client {
         VersionControl v = new VersionControl("src/main/java/A3/saves", 3);
         Person p1 = new Person("Max", "Mustermann");
         System.out.println(p1);
-        Path serialize = v.serialize(p1);
+        Class<?>[] classes = new Class[]{ Client.class};
+        Path serialize = v.serialize(p1, classes);
         try {
             Path[] deletedFiles = v.deleteOldSaveFiles();
         } catch (IOException e) {

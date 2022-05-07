@@ -73,7 +73,7 @@ public class CLI {
                     throw new RuntimeException(e);
                 }
             } else if (input == 5) { // serialize component assembler
-                componentAssembler.serialize();
+                componentAssembler.serializeComponents();
             } else if (input >= options.length) { // exit
                 System.out.println("Goodbye!");
                 break;
