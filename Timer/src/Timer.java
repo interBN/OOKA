@@ -10,13 +10,16 @@ public class Timer {
     @Inject
     public static Logger logger;
     static boolean kill;
+    static int counter;
 
     public Timer() {
         kill = false;
+        counter = 0;
     }
 
     @StartMethodDeclaration
     public static void main(String[] args) {
+        Timer t = new Timer();
         run();
     }
 
@@ -24,11 +27,10 @@ public class Timer {
         while (!kill) {
             try {
                 Thread.sleep(1000);
-//                System.out.println("aiujsfdhiahf");
                 if (logger != null) {
-                    logger.sendLog("alskifdjoiasdlfj");
+                    logger.sendLog(String.valueOf(counter++));
                 } else {
-                    System.out.println("Injection does not work.");
+                    System.out.println("Injection did not work.");
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
