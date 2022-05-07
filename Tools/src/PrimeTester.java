@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 @SuppressWarnings("unused")
-@StartClassDeclaration
+//@StartClassDeclaration
 
 public class PrimeTester {
 
@@ -18,7 +18,7 @@ public class PrimeTester {
         this.cache = new TreeMap<>();
     }
 
-    @StartMethodDeclaration
+//    @StartMethodDeclaration
     public static void main(String[] args) {
         PrimeTester prime = new PrimeTester();
         Scanner scanner = new Scanner(System.in);
@@ -37,12 +37,12 @@ public class PrimeTester {
         }
     }
 
-    @StartMethodDeclaration
+//    @StartMethodDeclaration
     public static PrimeTester getInstance() {
         return new PrimeTester();
     }
 
-    @StopMethodDeclaration
+//    @StopMethodDeclaration
     public void kill() {
         Thread.currentThread().interrupt();
     }

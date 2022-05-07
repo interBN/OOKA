@@ -43,7 +43,7 @@ public class VersionControl {
             Files.createDirectories(Paths.get(dir));
             Path path = Paths.get(dir, filename + new Date().getTime() + type);
             fos = new FileOutputStream(path.toString());
-            fos.write("<?xml version=\"1.0\"?>".getBytes(StandardCharsets.UTF_8));
+            fos.write("<?xml version=\"1.0\"?>\n".getBytes(StandardCharsets.UTF_8));
             byte[] bytes = xml.getBytes(StandardCharsets.UTF_8);
             fos.write(bytes);
             return path;
