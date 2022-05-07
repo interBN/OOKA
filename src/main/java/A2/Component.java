@@ -1,12 +1,13 @@
 package A2;
 
+import A2.componentInterfaces.StateInterface;
 import A3.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -18,22 +19,24 @@ public class Component implements Runnable {
     final String componentPath;
     final String selectedComponent;
     final String selectedClass;
-    final String selectedMethod;
-    final int selectedMethodIndex;
     final long created;
     final int id;
+    //    final String selectedMethod;
+//    final int selectedMethodIndex;
+    Constructor<?> constructor;
     boolean active;
     long activeTime;
 
     URLClassLoader classLoader;
     boolean block = false;
 
-    public Component(String componentPath, String selectedComponent, String selectedClass, String selectedMethod, int selectedMethodIndex) {
+    public Component(String componentPath, String selectedComponent, String selectedClass, Constructor<?> constructor) {
         this.componentPath = componentPath;
         this.selectedComponent = selectedComponent;
         this.selectedClass = selectedClass;
-        this.selectedMethod = selectedMethod;
-        this.selectedMethodIndex = selectedMethodIndex;
+        this.constructor = constructor;
+//        this.selectedMethod = selectedMethod;
+//        this.selectedMethodIndex = selectedMethodIndex;
         this.created = now();
         this.active = false;
         this.activeTime = -1;
@@ -45,20 +48,23 @@ public class Component implements Runnable {
         try {
             startInit();
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | ClassNotFoundException |
-                 MalformedURLException e) {
+                 MalformedURLException | InstantiationException e) {
             throw new RuntimeException(e);
         }
     }
 
-    void startInit() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, MalformedURLException {
+    void startInit() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, MalformedURLException, InstantiationException {
         block = true;
         URL url = new File(componentPath + selectedComponent).toURL();
         classLoader = new URLClassLoader(new URL[]{url});
         Class<?> c = classLoader.loadClass(this.selectedClass);
-        Method method = c.getDeclaredMethods()[this.selectedMethodIndex];
-        inject(c);
-        String[] args = {};
-        method.invoke(null, (Object) args);
+//        Method method = c.getDeclaredMethods()[this.selectedMethodIndex];
+
+        StateInterface o = (StateInterface) constructor.newInstance();
+
+//        inject(c);
+//        String[] args = {};
+//        method.invoke(null, (Object) args);
         activeTime = now();
         active = true;
         block = false;
@@ -75,14 +81,12 @@ public class Component implements Runnable {
     }
 
 
-    void inject(Class<?> c){
-//        Class<?> c = object.getClass();
-        for (Field field: c.getDeclaredFields()) {
-            if (field.isAnnotationPresent(A3.Inject.class)){
+    void inject(Class<?> c) {
+        for (Field field : c.getDeclaredFields()) {
+            if (field.isAnnotationPresent(A3.Inject.class)) {
                 try {
                     field.set(null, new Logger());
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     System.err.println("Error injecting Object: " + e.getMessage());
                 }
             }
@@ -127,7 +131,7 @@ public class Component implements Runnable {
         return "id: " + id + n
                 + "component: " + selectedComponent + n
                 + "class: " + selectedClass + n
-                + "method: " + selectedMethod + n
+//                + "method: " + selectedMethod + n
                 + "created: " + msToDate(created) + n
                 + "active: " + active +
                 (active ? n + "duration: " + h + ":" + m + ":" + s : "");
@@ -153,9 +157,9 @@ public class Component implements Runnable {
         return selectedClass;
     }
 
-    public String getSelectedMethod() {
-        return selectedMethod;
-    }
+//    public String getSelectedMethod() {
+//        return selectedMethod;
+//    }
 
     public long getCreated() {
         return created;

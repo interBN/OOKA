@@ -1,10 +1,11 @@
 package A2;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static A2.Helper.*;
@@ -96,16 +97,21 @@ public class CLI {
             if (selectedClass >= classes.length) return null;
         }
 
-        // SELECT METHOD
-        String[] methods = componentAssembler.getMethods(classes[selectedClass], dirComponent);
-        int selectedMethod = 0;
-        if (methods.length > 1) {
-            selectedMethod = ask("Please select a method:", methods, BACK);
-            if (selectedMethod >= methods.length) return null;
+        // SELECT CONSTRUCTOR
+        Constructor<?>[] cons = componentAssembler.getContructors(classes[selectedClass], dirComponent);
+        List<String> conNames = Arrays.stream(cons).map(Constructor::getName).collect(Collectors.toList());
+
+        Optional<Constructor<?>> first = Arrays.stream(cons).findFirst();
+        Constructor<?> constructor = first.get();
+
+        int selectedCon = 0;
+        if (cons.length > 1) {
+            selectedCon = ask("Please select a method:", conNames.toArray(String[]::new), BACK);
+            if (selectedCon >= cons.length) return null;
         }
 
         // CREATE THREAD
-        return new Component(pathResources, components[selectedComponent], classes[selectedClass], methods[selectedMethod], selectedMethod);
+        return new Component(pathResources, components[selectedComponent], classes[selectedClass], constructor);
     }
 
     Component selectComponentToUnload() {

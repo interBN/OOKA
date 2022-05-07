@@ -1,14 +1,13 @@
 package A2;
 
 import A2.annotations.StartClassDeclaration;
-import A2.annotations.StartMethodDeclaration;
 import A3.VersionControl;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -51,6 +50,7 @@ public class ComponentAssembler implements Runnable {
         while (!killInstance) {
             try {
                 Thread.sleep(1000);
+//                System.out.println("bla");
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -151,20 +151,22 @@ public class ComponentAssembler implements Runnable {
         return set.toArray(new String[0]);
     }
 
-    String[] getMethods(String classArg, String dir) throws MalformedURLException, ClassNotFoundException {
+    Constructor<?>[] getContructors(String classArg, String dir) throws MalformedURLException, ClassNotFoundException {
         URL url = new File(dir).toURL();
         URLClassLoader cl = new URLClassLoader(new URL[]{url});
         Class<?> c = cl.loadClass(classArg);
-        Method[] methods = c.getDeclaredMethods();
-        List<String> methodsFiltered = new ArrayList<>();
-        for (Method method : methods) {
-            StartMethodDeclaration annotation2 = method.getDeclaredAnnotation(StartMethodDeclaration.class);
-            if (annotation2 != null) {
-                methodsFiltered.add(method.getName());
-            }
-        }
-//        c.getMethod("main", String[].class)
-        return methodsFiltered.toArray(String[]::new);
+        Constructor<?>[] constructors = c.getConstructors();
+
+        //        Method[] methods = c.getDeclaredMethods();
+//        List<String> methodsFiltered = new ArrayList<>();
+//        for (Method method : methods) {
+//            StartMethodDeclaration annotation2 = method.getDeclaredAnnotation(StartMethodDeclaration.class);
+//            if (annotation2 != null) {
+//                methodsFiltered.add(method.getName());
+//            }
+//        }
+////        c.getMethod("main", String[].class)
+        return constructors;
     }
 
     public void close() {

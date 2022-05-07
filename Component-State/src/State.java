@@ -1,35 +1,37 @@
 import A2.annotations.StartClassDeclaration;
 import A2.annotations.StartMethodDeclaration;
 import A2.annotations.StopMethodDeclaration;
+import A2.componentInterfaces.StateInterface;
 import A3.Inject;
 import A3.Logger;
 
 @StartClassDeclaration
-public class State {
+public class State implements StateInterface {
     @Inject
-    public static Logger logger;
-    static boolean kill;
-    static States currentState;
+    public Logger logger;
+    boolean kill;
+    States currentState;
 
     @StartMethodDeclaration
-    public static void main(String[] args) {
+    public State() {
         kill = false;
         currentState = States.STATE_A;
-        logger.sendLog("Start State");
+//        log("Start State");
 
-        if (!kill) {
-            try {
-                Thread.sleep(1000);
-                if (logger == null) {
-                    System.out.println("Injection did not work.");
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (!kill) {
+//            try {
+//                Thread.sleep(1000);
+//                if (logger == null) {
+//                    System.out.println("Injection did not work.");
+//                }
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
-    public static void nextState() {
+    @Override
+    public void nextState() {
         if (currentState == States.STATE_A) {
             currentState = States.STATE_B;
         } else if (currentState == States.STATE_B) {
@@ -39,8 +41,23 @@ public class State {
         }
     }
 
+    @Override
+    public String getCurrentState() {
+        return currentState.name();
+    }
+
+    @Override
+    public void log(String msg) {
+        logger.sendLog(msg);
+    }
+
+    @Override
     @StopMethodDeclaration
-    enum States {
+    public void kill() {
+        kill = true;
+    }
+
+    public enum States {
         STATE_A, STATE_B, STATE_C,
     }
 }
