@@ -20,8 +20,7 @@ public class State {
         if (!kill) {
             try {
                 Thread.sleep(1000);
-                if (logger != null) {
-                } else {
+                if (logger == null) {
                     System.out.println("Injection did not work.");
                 }
             } catch (InterruptedException e) {

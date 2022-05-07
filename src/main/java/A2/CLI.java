@@ -90,13 +90,19 @@ public class CLI {
         // SELECT CLASS
         String dirComponent = pathResources + components[selectedComponent];
         String[] classes = componentAssembler.getClassNamesFromJarFile(dirComponent);
-        int selectedClass = ask("Please select a class:", classes, BACK);
-        if (selectedClass >= classes.length) return null;
+        int selectedClass = 0;
+        if (classes.length > 1) {
+            selectedClass = ask("Please select a class:", classes, BACK);
+            if (selectedClass >= classes.length) return null;
+        }
 
         // SELECT METHOD
         String[] methods = componentAssembler.getMethods(classes[selectedClass], dirComponent);
-        int selectedMethod = ask("Please select a method:", methods, BACK);
-        if (selectedMethod >= methods.length) return null;
+        int selectedMethod = 0;
+        if (methods.length > 1) {
+            selectedMethod = ask("Please select a method:", methods, BACK);
+            if (selectedMethod >= methods.length) return null;
+        }
 
         // CREATE THREAD
         return new Component(pathResources, components[selectedComponent], classes[selectedClass], methods[selectedMethod], selectedMethod);
