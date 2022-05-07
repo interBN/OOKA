@@ -1,5 +1,8 @@
 package A2;
 
+import A3.Logger;
+import A3.Timer;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -78,7 +81,7 @@ public class Component implements Runnable {
         for (Field field: c.getDeclaredFields()) {
             if (field.isAnnotationPresent(A3.Inject.class)){
                 try {
-                    field.set(null, new A3.Logger());
+                    field.set(null, new Logger());
                 }
                 catch (Exception e){
                     System.err.println("Error injecting Object: " + e.getMessage());

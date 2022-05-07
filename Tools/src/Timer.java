@@ -8,20 +8,19 @@ import A3.Logger;
 public class Timer {
 
     @Inject
-    public Logger logger;
-    boolean kill;
+    public static Logger logger;
+    static boolean kill;
 
     public Timer() {
-        this.kill = false;
+        kill = false;
     }
 
     @StartMethodDeclaration
     public static void main(String[] args) {
-        Timer t = new Timer();
-        t.run();
+        run();
     }
 
-    void run() {
+    static void run() {
         while (!kill) {
             try {
                 Thread.sleep(1000);
