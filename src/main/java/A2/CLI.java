@@ -163,17 +163,15 @@ public class CLI {
             return;
         }
         String[] options = new String[pathSet.size()];
-        int select = 0;
-        if (options.length > 1) {
-            int counter = 0;
-            for (Path path : pathSet) {
-                options[counter++] = counter == 1 ? path.toString() + YELLOW + " < latest" + ANSI_RESET : path.toString();
-            }
-            select = ask("Please select save file to load", options, BACK);
-            if (select >= options.length) {
-                return;
-            }
+        int counter = 0;
+        for (Path path : pathSet) {
+            options[counter++] = counter == 1 ? path.toString() + YELLOW + " < latest" + ANSI_RESET : path.toString();
         }
+        int select = ask("Please select save file to load", options, BACK);
+        if (select >= options.length) {
+            return;
+        }
+
         Path[] pathArray = pathSet.toArray(new Path[0]);
         componentAssembler.deserializeComponents(pathArray[select]);
     }
