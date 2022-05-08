@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<object-array>
+  <A2.Component>
+    <componentPath>src/main/java/A2/resources/</componentPath>
+    <selectedComponent>State.jar</selectedComponent>
+    <selectedClass>State</selectedClass>
+    <created>1652040500557</created>
+    <id>26562209</id>
+    <constructor>
+      <class>State</class>
+      <parameter-types/>
+    </constructor>
+    <active>false</active>
+    <activeTime>-1</activeTime>
+    <block>false</block>
+  </A2.Component>
+  <A2.Component>
+    <componentPath>src/main/java/A2/resources/</componentPath>
+    <selectedComponent>State.jar</selectedComponent>
+    <selectedClass>State</selectedClass>
+    <created>1652040508854</created>
+    <id>199336425</id>
+    <constructor>
+      <class>State</class>
+      <parameter-types/>
+    </constructor>
+    <active>false</active>
+    <activeTime>-1</activeTime>
+    <block>false</block>
+  </A2.Component>
+</object-array>

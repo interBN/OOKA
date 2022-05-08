@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -73,7 +74,7 @@ public class ComponentAssembler implements Runnable {
         Thread thread = new Thread(component);
         this.components.put(thread, component);
         System.out.println(Helper.getLine());
-        System.out.println("A new thread has been created.");
+        System.out.println("A new thread has been added.");
         System.out.println(component);
     }
 
@@ -176,7 +177,19 @@ public class ComponentAssembler implements Runnable {
     }
 
     void serializeComponents() {
+        if (components.size() == 0) {
+            System.out.println("No components available to serialize.");
+            return;
+        }
         Class<?>[] classes = new Class[]{Component.class};
         versionControl.serialize(components.values().toArray(), classes);
+    }
+
+    void deserializeComponents(Path path) throws IOException, ClassNotFoundException, InterruptedException, InvocationTargetException, IllegalAccessException {
+        Class<?>[] classes = new Class[]{Component.class};
+        Object[] deserializedObj = (Object[]) versionControl.deserialize(path, classes);
+        for (Object o : deserializedObj) {
+            loadComponent((Component) o);
+        }
     }
 }

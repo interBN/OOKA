@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -30,7 +31,7 @@ public class CLI {
         System.out.println("Start Component Assembler CLI");
         while (true) {
             System.out.println(Helper.getLine());
-            String[] options = {"show status", "load component", "unload component", "start component", "stop component", "serialize"};
+            String[] options = {"show status", "load component", "unload component", "start component", "stop component", "serialize", "deserialize"};
             int input = ask("Please select:", options, EXIT);
             if (input == 0) { // show status
                 componentAssembler.printStatus();
@@ -79,6 +80,13 @@ public class CLI {
                 }
             } else if (input == 5) { // serialize component assembler
                 componentAssembler.serializeComponents();
+            } else if (input == 6) { // deserialize component assembler
+                try {
+                    selectComponentToDeserialize();
+                } catch (IOException | ClassNotFoundException | InterruptedException | InvocationTargetException |
+                         IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
             } else if (input >= options.length) { // exit
                 System.out.println("Goodbye!");
                 break;
@@ -120,32 +128,54 @@ public class CLI {
 
     Component selectComponentToUnload() {
         String[] options = componentAssembler.listAllThreads("unload ");
-        int unload = ask("Select to unload: ", options, NONE);
-        if (unload >= options.length) {
+        int select = ask("Select to unload: ", options, NONE);
+        if (select >= options.length) {
             return null;
         }
         Component[] comps = componentAssembler.components.values().toArray(Component[]::new);
-        return comps[unload];
+        return comps[select];
     }
 
     Component selectComponentToStart() {
         String[] options = componentAssembler.listAllThreads("start ");
-        int start = ask("Select to start: ", options, NONE);
-        if (start >= options.length) {
+        int select = ask("Select to start: ", options, NONE);
+        if (select >= options.length) {
             return null;
         }
         Component[] components = componentAssembler.components.values().toArray(Component[]::new);
-        return components[start];
+        return components[select];
     }
 
     Component selectComponentToStop() {
         String[] options = componentAssembler.listAllThreads("stop ");
-        int start = ask("Select to stop: ", options, NONE);
-        if (start >= options.length) {
+        int select = ask("Select to stop: ", options, NONE);
+        if (select >= options.length) {
             return null;
         }
         Component[] components = componentAssembler.components.values().toArray(Component[]::new);
-        return components[start];
+        return components[select];
+    }
+
+    void selectComponentToDeserialize() throws IOException, ClassNotFoundException, InterruptedException, InvocationTargetException, IllegalAccessException {
+        Set<Path> pathSet = componentAssembler.versionControl.listFiles();
+        if (pathSet.size() == 0) {
+            System.out.println("No save files to load.");
+            return;
+        }
+        String[] options = new String[pathSet.size()];
+        int select = 0;
+        if (options.length > 1) {
+            int counter = 0;
+            for (Path path : pathSet) {
+                options[counter++] = counter == 1 ? path.toString() + YELLOW + " < latest" + ANSI_RESET : path.toString();
+            }
+            select = ask("Please select save file to load", options, BACK);
+            if (select >= options.length) {
+                return;
+            }
+        }
+        Path[] pathArray = pathSet.toArray(new Path[0]);
+        componentAssembler.deserializeComponents(pathArray[select]);
     }
 
     boolean askYesNo(String question) {
