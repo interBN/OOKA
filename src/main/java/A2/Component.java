@@ -1,6 +1,6 @@
 package A2;
 
-import A2.componentInterfaces.StateInterface;
+import A2.annotations.StartMethodDeclaration;
 import A3.Logger;
 
 import java.io.File;
@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -60,7 +61,9 @@ public class Component implements Runnable {
         Class<?> c = classLoader.loadClass(this.selectedClass);
 //        Method method = c.getDeclaredMethods()[this.selectedMethodIndex];
 
-        StateInterface o = (StateInterface) constructor.newInstance();
+        Object o = constructor.newInstance();
+        inject(o);
+        invokeStartMethod(o);
 
 //        inject(c);
 //        String[] args = {};
@@ -80,14 +83,29 @@ public class Component implements Runnable {
         active = false;
     }
 
-
-    void inject(Class<?> c) {
-        for (Field field : c.getDeclaredFields()) {
-            if (field.isAnnotationPresent(A3.Inject.class)) {
+    void inject(Object object){
+        Class<?> c = object.getClass();
+        for (Field field: c.getDeclaredFields()) {
+            if (field.isAnnotationPresent(A3.Inject.class)){
                 try {
-                    field.set(null, new Logger());
-                } catch (Exception e) {
+                    field.set(object, new Logger());
+                }
+                catch (Exception e){
                     System.err.println("Error injecting Object: " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    void invokeStartMethod(Object object){
+        Class<?> c = object.getClass();
+        for (Method method: c.getDeclaredMethods()){
+            if (method.isAnnotationPresent(StartMethodDeclaration.class)){
+                try {
+                    method.invoke(object);
+                }
+                catch(Exception e){
+                    System.err.println("Could not invoke StartMethod: " + e.getMessage());
                 }
             }
         }
