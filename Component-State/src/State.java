@@ -5,7 +5,7 @@ import A3.Inject;
 import A3.Logger;
 
 @StartClassDeclaration
-public class State{
+public class State {
     @Inject
     public Logger logger;
     boolean kill;
@@ -14,9 +14,8 @@ public class State{
     public State() {
     }
 
-
     @StartMethodDeclaration
-    public void main(){
+    public void main() {
         kill = false;
         currentState = States.STATE_A;
         log("Start State");
@@ -26,8 +25,7 @@ public class State{
                 Thread.sleep(1000);
                 if (logger == null) {
                     System.out.println("Injection did not work.");
-                }
-                else {
+                } else {
                     log(currentState.toString());
                 }
             } catch (InterruptedException e) {

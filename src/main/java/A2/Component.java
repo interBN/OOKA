@@ -1,6 +1,7 @@
 package A2;
 
 import A2.annotations.StartMethodDeclaration;
+import A2.annotations.StopMethodDeclaration;
 import A3.Logger;
 
 import java.io.File;
@@ -22,8 +23,12 @@ public class Component implements Runnable {
     final String selectedClass;
     final long created;
     final int id;
-    //    final String selectedMethod;
-//    final int selectedMethodIndex;
+
+    /**
+     * Instance of loaded class
+     */
+    Object instance;
+
     Constructor<?> constructor;
     boolean active;
     long activeTime;
@@ -59,15 +64,11 @@ public class Component implements Runnable {
         URL url = new File(componentPath + selectedComponent).toURL();
         classLoader = new URLClassLoader(new URL[]{url});
         Class<?> c = classLoader.loadClass(this.selectedClass);
-//        Method method = c.getDeclaredMethods()[this.selectedMethodIndex];
 
-        Object o = constructor.newInstance();
-        inject(o);
-        invokeStartMethod(o);
+        instance = constructor.newInstance();
+        inject(instance);
+        invokeStartMethod(instance);
 
-//        inject(c);
-//        String[] args = {};
-//        method.invoke(null, (Object) args);
         activeTime = now();
         active = true;
         block = false;
@@ -75,6 +76,9 @@ public class Component implements Runnable {
 
     void stopInit() {
         try {
+            if (instance != null) {
+                invokeStopMethod(instance);
+            }
             classLoader.close();
         } catch (IOException ignore) {
             // throw new RuntimeException(e);
@@ -83,29 +87,40 @@ public class Component implements Runnable {
         active = false;
     }
 
-    void inject(Object object){
+    void inject(Object object) {
         Class<?> c = object.getClass();
-        for (Field field: c.getDeclaredFields()) {
-            if (field.isAnnotationPresent(A3.Inject.class)){
+        for (Field field : c.getDeclaredFields()) {
+            if (field.isAnnotationPresent(A3.Inject.class)) {
                 try {
                     field.set(object, new Logger());
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     System.err.println("Error injecting Object: " + e.getMessage());
                 }
             }
         }
     }
 
-    void invokeStartMethod(Object object){
+    void invokeStartMethod(Object object) {
         Class<?> c = object.getClass();
-        for (Method method: c.getDeclaredMethods()){
-            if (method.isAnnotationPresent(StartMethodDeclaration.class)){
+        for (Method method : c.getDeclaredMethods()) {
+            if (method.isAnnotationPresent(StartMethodDeclaration.class)) {
                 try {
                     method.invoke(object);
-                }
-                catch(Exception e){
+                } catch (Exception e) {
                     System.err.println("Could not invoke StartMethod: " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    void invokeStopMethod(Object object) {
+        Class<?> c = object.getClass();
+        for (Method method : c.getDeclaredMethods()) {
+            if (method.isAnnotationPresent(StopMethodDeclaration.class)) {
+                try {
+                    method.invoke(object);
+                } catch (Exception e) {
+                    System.err.println("Could not invoke StopMethod: " + e.getMessage());
                 }
             }
         }

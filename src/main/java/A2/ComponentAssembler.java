@@ -155,7 +155,7 @@ public class ComponentAssembler implements Runnable {
         URL url = new File(dir).toURL();
         URLClassLoader cl = new URLClassLoader(new URL[]{url});
         Class<?> c = cl.loadClass(classArg);
-        Constructor<?>[] constructors = c.getConstructors();
+        return c.getConstructors();
 
         //        Method[] methods = c.getDeclaredMethods();
 //        List<String> methodsFiltered = new ArrayList<>();
@@ -166,7 +166,7 @@ public class ComponentAssembler implements Runnable {
 //            }
 //        }
 ////        c.getMethod("main", String[].class)
-        return constructors;
+//        return constructors;
     }
 
     public void close() {
