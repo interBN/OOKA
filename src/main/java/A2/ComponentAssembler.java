@@ -77,9 +77,10 @@ public class ComponentAssembler implements Runnable {
         System.out.println(component);
     }
 
-    void unloadComponent(Component component) {
+    void unloadComponent(Component component) throws IOException {
         Thread thread = findThread(component);
         assert thread != null;
+        stopComponent(component);
         component.close();
         thread.interrupt();
         components.remove(thread);
@@ -91,7 +92,7 @@ public class ComponentAssembler implements Runnable {
         Thread newThread = new Thread(component);
         this.components.put(newThread, component);
         newThread.start();
-        newThread.join();
+//        newThread.join();
     }
 
     void stopComponent(Component component) throws IOException {
@@ -151,7 +152,7 @@ public class ComponentAssembler implements Runnable {
         return set.toArray(new String[0]);
     }
 
-    Constructor<?>[] getContructors(String classArg, String dir) throws MalformedURLException, ClassNotFoundException {
+    Constructor<?>[] getConstructors(String classArg, String dir) throws MalformedURLException, ClassNotFoundException {
         URL url = new File(dir).toURL();
         URLClassLoader cl = new URLClassLoader(new URL[]{url});
         Class<?> c = cl.loadClass(classArg);

@@ -1,4 +1,4 @@
-package A3;
+package A3.playground;
 
 public interface PersonInterface {
     @Override

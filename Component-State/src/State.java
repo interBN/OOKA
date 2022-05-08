@@ -17,21 +17,21 @@ public class State {
     @StartMethodDeclaration
     public void main() {
         kill = false;
-        currentState = States.STATE_A;
+        currentState = States.STATE_C;
         log("Start State");
-
-        if (!kill) {
+        while (!kill) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
                 if (logger == null) {
                     System.out.println("Injection did not work.");
                 } else {
-                    log(currentState.toString());
+                    nextState();
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (InterruptedException ignore) {
+//                e.printStackTrace();
             }
         }
+        log("Stop State");
     }
 
     public void nextState() {
@@ -42,6 +42,7 @@ public class State {
         } else if (currentState == States.STATE_C) {
             currentState = States.STATE_A;
         }
+        log("New state: " + getCurrentState());
     }
 
     public String getCurrentState() {

@@ -1,11 +1,12 @@
 package A3;
 
-import java.time.LocalDateTime;
+import A2.Helper;
 
 public class Logger {
-    public Logger(){
+    public Logger() {
     }
-    public void sendLog(String msg){
-        System.out.println("++++ LOG: " + msg + "(" + LocalDateTime.now() + ")");
+
+    public void sendLog(String msg) {
+        System.out.println("++++ LOG: " + msg + " (" + Helper.msToDate(Helper.now()) + ")");
     }
 }

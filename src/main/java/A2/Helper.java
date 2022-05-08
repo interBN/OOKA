@@ -21,11 +21,11 @@ public class Helper {
         return "----------------------------------------";
     }
 
-    static long now() {
+    public static long now() {
         return new Date().getTime();
     }
 
-    static String msToDate(long ms) {
+    public static String msToDate(long ms) {
         DateFormat simple = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss:SSS Z");
         Date result = new Date(ms);
         return simple.format(result);

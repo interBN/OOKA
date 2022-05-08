@@ -1,4 +1,7 @@
-package A3;
+package A3.playground;
+
+import A3.Inject;
+import A3.Logger;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -9,7 +12,7 @@ public class PersonReflectionTest {
 
     public static void main(String[] args) {
         try {
-            Class<?> aClass = Class.forName("A3.Person");
+            Class<?> aClass = Class.forName("A3.playground.Person");
             Constructor<?>[] constructors = aClass.getConstructors();
 
 //            Inject annotation = aClass.getAnnotation(Inject.class);

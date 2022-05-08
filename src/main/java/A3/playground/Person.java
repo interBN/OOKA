@@ -1,4 +1,7 @@
-package A3;
+package A3.playground;
+
+import A3.Inject;
+import A3.Logger;
 
 class Person implements PersonInterface {
 

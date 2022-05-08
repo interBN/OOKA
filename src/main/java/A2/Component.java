@@ -67,11 +67,11 @@ public class Component implements Runnable {
 
         instance = constructor.newInstance();
         inject(instance);
-        invokeStartMethod(instance);
 
         activeTime = now();
         active = true;
         block = false;
+        invokeStartMethod(instance);
     }
 
     void stopInit() {
@@ -79,6 +79,7 @@ public class Component implements Runnable {
             if (instance != null) {
                 invokeStopMethod(instance);
             }
+            instance = null;
             classLoader.close();
         } catch (IOException ignore) {
             // throw new RuntimeException(e);

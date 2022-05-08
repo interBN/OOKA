@@ -50,7 +50,11 @@ public class CLI {
                 if (component == null) {
                     continue;
                 }
-                componentAssembler.unloadComponent(component);
+                try {
+                    componentAssembler.unloadComponent(component);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             } else if (input == 3) { // start component
                 System.out.println("Start Component");
                 try {
@@ -98,7 +102,7 @@ public class CLI {
         }
 
         // SELECT CONSTRUCTOR
-        Constructor<?>[] cons = componentAssembler.getContructors(classes[selectedClass], dirComponent);
+        Constructor<?>[] cons = componentAssembler.getConstructors(classes[selectedClass], dirComponent);
         List<String> conNames = Arrays.stream(cons).map(Constructor::getName).collect(Collectors.toList());
 
         Optional<Constructor<?>> first = Arrays.stream(cons).findFirst();
