@@ -76,6 +76,9 @@ active: false
 > CR2: Erweitern sie ihre Laufzeitumgebung um einen horizontalen Logging-Dienst, der von ihrer Laufzeitumgebung für alle
 > kompatiblen Komponenten angeboten werden soll.
 
+Die Injektion des Loggers erfolgt nach der Instanziierung der Komponente über Reflection, sodass auf eine 
+Setter-Methode verzichtet werden kann.
+
 **Siehe:**
 
 - [Component](Component.java)
