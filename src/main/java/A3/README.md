@@ -83,21 +83,7 @@ Setter-Methode verzichtet werden kann.
 
 - [Component](Component.java)
 
-```
-void inject(Object object){
-    Class<?> c = object.getClass();
-    for (Field field: c.getDeclaredFields()) {
-        if (field.isAnnotationPresent(A3.Inject.class)){
-            try {
-                field.set(object, new Logger());
-            }
-            catch (Exception e){
-                System.err.println("Error injecting Object: " + e.getMessage());
-            }
-        }
-    }
-}
-```
+https://github.com/interBN/OOKA/blob/7e6787401c077f0c89721abcccca24fd3c0ccc12/src/main/java/A2/Component.java#L91-L102
 
 - [Inject](Inject.java)
 - [Logger](Logger.java)
