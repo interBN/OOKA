@@ -128,7 +128,7 @@ public class CLI {
 
     Component selectComponentToUnload() {
         String[] options = componentAssembler.listAllThreads("unload ");
-        int select = ask("Select to unload: ", options, NONE);
+        int select = ask("Select to unload: ", options, BACK);
         if (select >= options.length) {
             return null;
         }
@@ -138,7 +138,7 @@ public class CLI {
 
     Component selectComponentToStart() {
         String[] options = componentAssembler.listAllThreads("start ");
-        int select = ask("Select to start: ", options, NONE);
+        int select = ask("Select to start: ", options, BACK);
         if (select >= options.length) {
             return null;
         }
@@ -148,7 +148,7 @@ public class CLI {
 
     Component selectComponentToStop() {
         String[] options = componentAssembler.listAllThreads("stop ");
-        int select = ask("Select to stop: ", options, NONE);
+        int select = ask("Select to stop: ", options, BACK);
         if (select >= options.length) {
             return null;
         }
@@ -171,7 +171,6 @@ public class CLI {
         if (select >= options.length) {
             return;
         }
-
         Path[] pathArray = pathSet.toArray(new Path[0]);
         componentAssembler.deserializeComponents(pathArray[select]);
     }
