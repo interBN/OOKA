@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Tools/Tools.iml" filepath="$PROJECT_DIR$/Tools/Tools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Component-State/Component-State.iml" filepath="$PROJECT_DIR$/Component-State/Component-State.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Component-Timer/Component-Timer.iml" filepath="$PROJECT_DIR$/Component-Timer/Component-Timer.iml" />
     </modules>
   </component>
 </project>
