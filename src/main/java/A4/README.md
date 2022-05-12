@@ -18,7 +18,7 @@ http://samnewman.io/patterns/architectural/bff/ (Last Access: 08.05.2022)
 > Microservices auf diese Einteilung und verspricht sich dadurch einen klaren Vorteil. Was denken sie dazu? Was würde
 > sie dem Unternehmen eher empfehlen?
 
-Die horizontale Aufteilung in Schichten und deren Teams ist für Microservices nicht geeignet. Microservices erfordern 
+Die horizontale Aufteilung in Schichten und deren Teams ist für Microservices nicht geeignet. Microservices erfordern
 eine vertikale Aufteilung in Teams für die einzelnen Microservices, die alle Schichten überspannen.
 
 > Statement Nr. 2:
@@ -26,7 +26,7 @@ eine vertikale Aufteilung in Teams für die einzelnen Microservices, die alle Sc
 > „Das wird schon! Die Geschäftsführung des Unternehmens muss doch für so
 > eine geringfügige Architekturänderung nicht informiert werden.“ Was denken sie über dieses Statement?
 
-Die Änderung in der Architektur ist keineswegs geringfügig. Für die Umstellung auf eine Microservice-Struktur sind 
+Die Änderung in der Architektur ist keineswegs geringfügig. Für die Umstellung auf eine Microservice-Struktur sind
 umfangreiche Änderungen nicht nur an der Architektur, sondern auch bei der Verteilung der Teams nötig.
 
 Die Geschäftsführung sollte bei diesem Unterfangen auf jeden Fall mit ins Boot geholt werden.
@@ -38,8 +38,8 @@ Die Geschäftsführung sollte bei diesem Unterfangen auf jeden Fall mit ins Boot
 > z.B. AmazonWS) ausgelagert werden kann. Die Anwendung gilt somit als skalierbar! Es besteht eh keine Notwendigkeit der
 > Skalierung einzelner Komponenten, so die Bereichsleitung. Wie stehen sie zu diesem Urteil?
 
-Das bloße deployen auf einer VM bedeutet nicht, dass die Anwendung auch skalierbar ist. Zudem ist bei einer 
-Unterteilung in Microservices die Skalierung einzelner Komponenten nötig, da jeder Microservice seine eigene 
+Das bloße deployen auf einer VM bedeutet nicht, dass die Anwendung auch skalierbar ist. Zudem ist bei einer
+Unterteilung in Microservices die Skalierung einzelner Komponenten nötig, da jeder Microservice seine eigene
 Anwendungsschicht besitzt.
 
 > Statement Nr. 4:
@@ -49,11 +49,11 @@ Anwendungsschicht besitzt.
 > Begründungen nicht explizit an (--man gibt zu, vielleicht auch nicht richtig hingehört zu haben...). Was für Gründe
 > könnten das sein aus ihrer Sicht? Wie könnte man diese Schicht ggf. im Rahmen der Microservice-Architektur optimieren?
 
-Da die UI-Komponenten unterschiedliche Aufgaben haben, führen sie auch unterschiedliche Aufrufe an die API durch, 
-wodurch die Komplexität steigt. Die Webbrowser-Komponente erlaubt mehr Aufrufe als die Mobile App und der 
+Da die UI-Komponenten unterschiedliche Aufgaben haben, führen sie auch unterschiedliche Aufrufe an die API durch,
+wodurch die Komplexität steigt. Die Webbrowser-Komponente erlaubt mehr Aufrufe als die Mobile App und der
 Desktop-Client macht ganz andere API-Aufrufe als die beiden anderen Komponenten.
 
-Eine Lösung nach Newman wäre, die Verwendung einer BFF (Backend For Frontend) Komponenten für jede der UI-Komponenten. 
+Eine Lösung nach Newman wäre, die Verwendung einer BFF (Backend For Frontend) Komponenten für jede der UI-Komponenten.
 Dies führt zu mehreren überschaubaren Komponenten statt einer komplexen General-Purpose API.
 
 > Statement Nr. 5:
@@ -76,6 +76,15 @@ Bla bla
 > „Das Entwicklungsteam will ja unbedingt ein Monitoring. Warum das bitte?? Zu teuer und wenig
 > aussagekräftig. Das lassen wir mal!“. Was sind aus ihrer Sicht die Vorteile einer Monitoring-Komponente? Gibt es
 > Herausforderungen?
+
+Nach außen hin mag es als wenig aussagekräftig erscheinen. Jedoch wurde nicht berücksichtigt, dass die Wartung der
+Software hohe Kosten verursachen kann/wird. Am Ende läge der Aufwand bei den oben beschriebenen Entwicklern.
+
+Das Monitoring ist ein wichtiger Bestandteil zur Wartung einer produktiven Software. So können frühzeitig Probleme
+erkannt werden, bevor diese zu einem operativen Risiko heranwachsen, wie beispielsweise Performance Probleme, die bis
+hin zu einem Crash der Software führen können. Wichtige Monitoring Features wie beispielsweise ein Notification System,
+dienen dazu den Aufwand der Wartung zu minimieren - das heißt mit einem gut durchdachten Monitoring können kurz- bis
+spätestens mittelfristig laufende Kosten gespart werden.
 
 ## b)
 
