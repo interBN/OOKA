@@ -62,14 +62,25 @@ Dies führt zu mehreren überschaubaren Komponenten statt einer komplexen Genera
 > Komponente „Manufacturing Products“ häufig für Probleme während der Konstruktion von Produkten (siehe Erläuterungen in
 > Dokument). Was sind hier konkret die Probleme? Wie sähe eine mögliche Lösungsstrategie aus?
 
-Bla bla
+Lösungsansätze:
+
+- Single Responsibility: Analyse-Komponente aus "Manufactoring Product" auslagern.
+- Parallelität statt sequenzielle Arbeitsschritte
+- Benutzung eines Caches
+- Mehr Hardware Resourcen nutzen
+- Code Optimierung: Kann der Code performanter laufen?
 
 > Statement Nr. 6:
 >
 > „Unsere langfristige Strategie: ein globales und universales Datenmodell!“! Da man auch immer noch
 > diverse Bestandsysteme verwendet (SAP ERP, Oracle CRM), sieht man die Etablierung eines gemeinsamen
-> universalenDatenmodells als unabdingbar. Was denken sie? Wie würden sie hier mit den heterogenen Datenmodellen
+> universalen Datenmodells als unabdingbar. Was denken sie? Wie würden sie hier mit den heterogenen Datenmodellen
 > umgehen? Wird diese Meinung von allen Entwicklerteams mitgetragen?
+
+Ein gemeinsames Datenmodel ist nicht ratsam für ein Microservice Model, da es zu große Abhängigkeiten erzeugt. Die
+Microservices sollen unabhängig voneinander laufen können - so auch deren Datenmodelle. Durch die Trennung der
+Datenmodelle wird auch das Risiko von unvorhersehbaren Problemen verteilt. Fällt ein Datenmodel aus können die anderen
+noch weiterlaufen.
 
 > Statement Nr. 7:
 >
