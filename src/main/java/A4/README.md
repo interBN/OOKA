@@ -99,3 +99,20 @@ spätestens mittelfristig laufende Kosten gespart werden.
 
 ## b)
 
+> Modellieren sie eine erste Version einer neuen Software-Architektur auf Basis des Architekturstils Microservices.
+> Modellieren sie eine Kontext-Sicht sowie eine Baustein- Sicht (vgl. Kapitel 3, Abschnitt 2). Falls schon anwendbar,
+> können sie auch eine erste Verteilungssicht modellieren. Sie können sich bei der Baustein-Sicht gerne an die allgemeinen
+> Erläuterungen zu Microservices aus Kapitel 2 (Abschnitt Microservices) sowie an die in Kapitel 3 (Abschnitt 4)
+> orientieren. Modellieren sie auch eine erste Context Map (vgl. Kapitel 2 (Abschnitt Microservices))!
+> 
+> Bei der Modellierung der Sichten sollten sie sich zudem an die abgeleiteten Lösungen für alle Architecture Smells (
+> Abschnitt IV.A) sowie für alle Anti Patterns (Abschnitt IV.B) aus dem Katalog von (Schirgi and Brenner, 2021)
+> orientieren! Geben sie für jede Lösung eines Anti Patterns bzw. eines Architecture Smells eine erste Einschätzung ab,
+> inwiefern diese für ihren ersten Architektur-Entwurf relevant sind und wie sie die Lösungen in die Software-Architektur
+> integrieren konnten. Geben sie auch eine erste Einschätzung hinsichtlich Priorisierung, Aufwand sowie Implikationen für
+> die spätere Implementierung einer jeden Lösung ab (vgl. ähnliche Herleitung wie bei der LZU, Übung Nr. 2).
+> 
+> Bei der Kontext-Sicht sollten auch die verschiedenen Akteure der Anwendung herauskommen. Sind die Akteure in der
+> bestehenden IST-Architektur alle berücksichtigt worden? Tipp: Fokussieren sie sich bei der Baustein-Sicht sowie bei der
+> Context Map auf die Komponente „Manufacturing Products“ – hier finden sie auch einige Hinweise dazu in der
+> Architekturbeschreibung.
