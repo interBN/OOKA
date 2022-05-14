@@ -125,6 +125,9 @@ spätestens mittelfristig laufende Kosten gespart werden.
 
 ![](ooka-a4-b.drawio.png)
 
+### Baustein-Sicht
+![](baustein.drawio.png)
+
 ---------------
 
 ### Architectural Smells
