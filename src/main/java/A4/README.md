@@ -124,3 +124,98 @@ spätestens mittelfristig laufende Kosten gespart werden.
 ### Kontext-Sicht
 
 ![](ooka-a4-b.drawio.png)
+
+---------------
+
+### Architectural Smells
+
+#### Hard-Coded Endpoints
+
+Wird aktuell noch nicht berücksichtigt.
+
+#### Shared Persistence
+
+Jeder Service besitzt eine eigene Datenbank.
+
+#### Independent Deployability
+
+Wird aktuell noch nicht berücksichtigt.
+
+#### Horizontal Scalability
+
+Wird aktuell noch nicht berücksichtigt.
+
+#### Isolation of failures
+
+Wird aktuell noch nicht berücksichtigt.
+
+#### Decentralization
+
+In der aktuellen Planung ist die Management Komponente getrennt von den anderen Komponenten und kann somit unabhängig
+deployt werden.
+
+---------------
+
+### Design Anti-pattern
+
+#### Wrong Cut
+
+Wird aktuell noch nicht berücksichtigt.
+
+#### Cyclic Dependencies
+
+Es existieren keine Cyclic Dependencies.
+
+#### Nano Service
+
+Nach unserer Einschätzung existieren keine Nano Services. Während der Entwicklung wird die Größe eines Services
+konkret. Auch dann noch kann überlegt werden ob Services getrennt oder zusammengefasst werden.
+
+#### Mega Service
+
+Nach unserer Einschätzung existieren keine Mega Services. Während der Entwicklung wird die Größe eines Services
+konkret. Auch dann noch kann überlegt werden ob Services getrennt oder zusammengefasst werden.
+
+#### Shared Libraries
+
+Wird aktuell noch nicht berücksichtigt.
+
+#### Too many standards
+
+Wird aktuell noch nicht berücksichtigt.
+
+#### Too new technology
+
+Wird aktuell noch nicht berücksichtigt.
+
+#### Manual Anti-pattern
+
+Wird aktuell noch nicht berücksichtigt.
+
+#### No Continuous Integration (CI) / Continuous Delivery (CD)
+
+Wird aktuell noch nicht berücksichtigt.
+
+#### No API Gateway
+
+Wird aktuell noch nicht berücksichtigt.
+
+#### Timeouts
+
+Wird aktuell noch nicht berücksichtigt.
+
+#### No API Versioning
+
+Wird aktuell noch nicht berücksichtigt.
+
+#### No Health Check
+
+Der Health Check soll ein Teil der Monitor Komponente werden.
+
+#### Local Logging
+
+Ein zentrale Logging Komponente wurde berücksichtigt.
+
+#### Insufficient Monitoring
+
+Soll in der Monitor-Komponente berücksichtigt werden.
